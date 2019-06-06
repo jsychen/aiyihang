@@ -57,6 +57,7 @@ export default {
             plateNo: info.carList,
             boxId: this.params.id
          };
+         Indicator.open('正在连接洗车机...');
          this.$ajax.post('erpcard/submitFastSettleBill', data).then( res => {
             if(res.data.code === '0000'){
                this.addOrderRecord();
@@ -75,8 +76,8 @@ export default {
             washType: this.params.washType,
             boxUid: this.params.id
          };
-         
          this.$ajax.get('washRecord/submitWashRecord', {params: data}).then( res => {
+            Indicator.close();
             if(res.data.code === '0000'){
                this.handleStart();
                return;

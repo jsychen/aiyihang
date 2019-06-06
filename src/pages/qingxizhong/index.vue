@@ -5,11 +5,29 @@
     <audio preload id="dala" src="http://wx1.aiyihang.com/dist/dala.mp3"></audio>
     <div class="white">
       <div class="qixibg">
-        <img class="car" src="../../assets/car1.gif" alt v-if="startxi=='正在风干'">
+        <!-- <img class="car" src="../../assets/car1.gif" alt v-if="startxi=='正在风干'">
          <img class="car" src="../../assets/car.gif" alt v-else>
          <img src="../../assets/line.png" alt class="lines"/>
          <span class="startxi">{{startxi}}</span>
+         <span class="xi">{{startxi}},请勿操作</span> -->
+
+<div class="circle">
+          <div class="pie-right"> 
+            <div class="rights" v-bind:style="{ transform: rotateR  }"></div>
+          </div>
+          <div class="pie-left">
+            <div class="lefts" v-bind:style="{ transform: rotateL }"></div>
+          </div>
+          <div class="mask">
+            <img src="../../assets/rec.png" style="display:block;width:100%;height:100%;" v-if="isImg">
+            <img src="../../assets/rect.png" style="display:block;width:100%;height:100%;" v-else>
+          </div>
+        </div>
+        <div class="tops">
+            <span class="startxi">{{startxi}}</span>
          <span class="xi">{{startxi}},请勿操作</span>
+        </div>
+
       </div>
       <div class="ad">
          <video src="http://wx1.aiyihang.com/yetiboli.mp4" poster="../../assets/cover.png" controls x5-playsinline="" playsinline="" webkit-playsinline=""></video>
@@ -122,7 +140,12 @@ export default {
       openId: '',
       newusername: '',
       timer: null,
-      startxi:'预洗状态'
+      startxi:'预洗状态',
+      timers:null,
+      timeCount:0,
+      rotateL:0,
+      rotateR:0,
+      isImg:true
     }
   },
   methods: {
@@ -221,6 +244,23 @@ export default {
       }).catch(err => {
         // alert(JSON.stringify(err.response.data.msg))
       });
+    },
+    changeProcess(value) {
+      var num = value * 1.2414
+      if (num < 180) {
+        this.rotateR = 'rotate(' + num + 'deg)'
+      
+      } else {
+        this.rotateL = 'rotate(' + (num-180) + 'deg)'
+        this.rotateR = 'rotate(' + 180 + 'deg)'
+       
+      }
+    
+      if(this.timeCount>=360){
+         clearInterval(this.timers);
+         this.isImg = false;
+        
+      }
     }
   },
 
@@ -262,6 +302,13 @@ export default {
    
   },
   mounted() {
+    var that =  this;
+   this.timers= setInterval(function(){
+   ++that.timeCount 
+  //  that.timeCount+=60 
+   console.log(that.timeCount)
+   that.changeProcess(that.timeCount)
+    },1000)
     var map = new BMap.Map("map");    // 创建Map实例
     map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);  // 初始化地图,设置中心点坐标和地图级别
     //添加地图类型控件
@@ -334,6 +381,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items:center;
+  position: relative;
 }
 .clear img {
   width: 100%;
@@ -547,5 +595,67 @@ export default {
       padding: 0 px2rem(20px);
       font-size: px2rem(14px);
    }
+}
+
+// 环形进度条
+//css
+.circle {
+  //这个元素可以提供进度条的颜色
+  position: absolute;
+  height: px2rem(140px);
+  width: px2rem(140px);
+  border-radius: 50%;
+  background: #7ae000; //注意这是表示当前进度的颜色
+  top: px2rem(18px);
+}
+.pie-right,
+.pie-left {
+  //这俩元素主要是为了分别生成两个半圆的，所以起作用的地方在于clip裁掉另一半
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: px2rem(140px);
+  width: px2rem(140px);
+  border-radius: 50%;
+}
+.rights,
+.lefts {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: px2rem(140px);
+  width: px2rem(140px);
+  border-radius: 50%;
+  background: #5f5f5f; //注意这个才不是当前进度的颜色
+}
+// .rights {
+//   transform: rotate(30deg);
+// }
+.pie-right,
+.rights {
+  //裁掉左边一半
+  clip: rect(0, auto, auto, px2rem(70px));
+}
+.pie-left,
+.lefts {
+  //裁掉右边一半
+  clip: rect(0, px2rem(70px), auto, 0);
+}
+.mask {
+  //我是遮罩 mask不用改 好欣慰
+  position: absolute;
+  z-index: 10;
+  top: px2rem(13.5px);
+  left: px2rem(13.5px);
+  height: px2rem(115px);
+  width: px2rem(115px);
+  // background-image: url(../../assets/rec.png);
+}
+.tops{
+  position:absolute;
+  bottom:px2rem(25px);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
 }
 </style>
