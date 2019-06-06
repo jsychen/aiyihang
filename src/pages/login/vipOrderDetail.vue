@@ -1,11 +1,14 @@
 <template>
   <div class="container">
+     <div class="card">
+        <p>卡内剩余</p>
+        <b>{{info.surplusTimes || 0}} 次</b>
+        <p>洗车服务</p>
+     </div>
     <template v-if="info.surplusTimes>0">
-      <p>您的会员卡内还剩 <b>{{info.surplusTimes}}</b> 次洗车服务</p>
       <button @click="handlePay">确认支付</button>
     </template>
     <template v-else>
-      <p>您的会员卡内已无洗车服务，请选择其他支付方式</p>
       <router-link tag="button" :to="{'name': 'saomastart', 'params': {id: params.id}}">选择其它支付方式</router-link>
     </template>
   </div>
@@ -110,72 +113,51 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../assets/common.scss";
-.container {
-  padding: px2rem(50px) px2rem(20px) 0;
-  p {
-    font-size: px2rem(18px);
-    padding: 0;
-    margin: 0;
-    text-align: center;
-    b {
-      color: #d81618;
-      padding: 0 10px;
-      font-size: px2rem(24px);
-    }
-  }
-  button {
-    width: 100%;
-    height: px2rem(40px);
-    background-color: #d81618;
-    border: 0;
-    border-radius: 5px;
-    color: #fff;
-    font-size: px2rem(16px);
-  }
+*{
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
 }
-#vipLogin {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: px2rem(20px);
-  box-sizing: border-box;
-  * {
-    box-sizing: border-box;
+.container {
+  .card{
+     width: px2rem(360px);
+     height: px2rem(195px);
+     margin: px2rem(20px) auto;
+     padding-left: px2rem(100px);
+     padding-top: px2rem(50px);
+     background-image:url(../../assets/images/card_bg.png);
+     background-size: cover;
+     overflow: hidden;
+     clear: both;
+     *{
+        line-height: px2rem(30px);
+        width: 100%;
+        float: left;
+     }
+     p{
+        font-size:px2rem(14px);
+        color: #917548;
+     }
+     b{
+        font-size: px2rem(24px);
+        color: #594222;
+        margin: px2rem(10px) 0;
+     }
   }
-  .inner {
-    position: absolute;
-    left: px2rem(20px);
-    top: px2rem(40px);
-    overflow: hidden;
-    clear: both;
-    img {
-      width: px2rem(120px);
-      display: block;
-      margin: 0 auto px2rem(30px);
-    }
-    p {
-      font-size: px2rem(14px);
-      padding: 0;
-      margin: 0;
-    }
-    input {
-      width: 100%;
-      padding: px2rem(5px);
-      height: px2rem(40px);
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      margin-bottom: px2rem(5px);
-    }
-  }
-  .subbutton {
-    display: flex;
-    justify-content: center;
-    margin-top: px2rem(30px);
-  }
-  .button {
-    width: 100%;
-    background-color: #d81618;
+  
+  button {
+    width: px2rem(330px) !important;
+    height: px2rem(50px);
+    border: 1px solid #df4242;
+    border-radius: 5px;
+    color: #df4242;
+    font-size: px2rem(18px);
+    border-radius: px2rem(25px);
+    background:#fff;
+    padding: 0;
+    display: block;
+    margin: px2rem(60px) auto 0;
+    letter-spacing: 2px;
   }
 }
 </style>
