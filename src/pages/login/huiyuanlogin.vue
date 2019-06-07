@@ -169,7 +169,7 @@ input, select {
       padding: px2rem(20px);
       position: absolute;
       left: 0;
-      bottom: 0;
+      top: px2rem(480px);
       *{
          font-size: px2rem(14px);
       }
