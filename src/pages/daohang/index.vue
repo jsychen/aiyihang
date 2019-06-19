@@ -514,7 +514,8 @@ export default {
           if (res.data.data == false) {
             Toast('未登录,3秒后跳转')
             setTimeout(() => {
-              this.$router.replace({ name: 'myindex' })
+            //   this.$router.replace({ name: 'myindex' });
+              this.$router.replace({name: 'login'});
             }, 3000)
           }
         } else {
