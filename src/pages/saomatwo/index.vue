@@ -1,15 +1,14 @@
 <template>
   <div class="wrap">
     <audio preload id="music" src="http://wx1.aiyihang.com/dist/start.mp3"></audio>
+    <img class="voice" src="../../assets/images/icon-voice.svg" alt>
     <div class="inner">
       <div class="state">
-        <div class="one">√</div>
-        <div class="two"></div>
-        <div class="tree"></div>
-        <div class="four">2</div>
-        <div class="five"></div>
-        <div class="six"></div>
-        <div class="seven">3</div>
+         <span class="pass">1</span>
+         <div class="line blue"></div>
+         <span class="active">2</span>
+         <div class="line active"></div>
+         <span>3</span>
       </div>
       <div class="tip-title">确认完成下列操作</div>
       <div class="tip-title-bottom">保障洗车过程车辆安全</div>
@@ -66,10 +65,11 @@
         </div>
       </div>
       <div class="tips">注意事项：洗车过程中禁止移动车辆和上下车</div>
-      <div class="xieyi" @click="picChange">
-        <img class="onoff" :src="url">我已阅读并同意《服务协议》的相关规定，我已知晓相关风险并自行承担相关责任
+      <div class="agreement" @click="agree = !agree">
+         <div class="radio" :class="{'agree': agree}"></div>
+         <span>我已阅读并同意《服务协议》的相关规定，我已知晓相关风险并自行承担相关责任</span>
       </div>
-      <div class="bottom-btn" @click="next">下一步</div>
+      <button class="handleNext" @click="next" :disabled="!agree">下一步</button>
     </div>
   </div>
 </template>
@@ -78,7 +78,8 @@ import { Toast } from 'mint-ui';
 export default {
   data() {
     return {
-      url: '../../dist/select.png'
+      url: '../../dist/select.png',
+      agree: false
     }
   },
   methods: {
@@ -92,13 +93,13 @@ export default {
           id: that.$route.params.id
         }      })
     },
-    picChange() {
-      if (this.url == "../../dist/nosel.png") {
-        this.url = "../../dist/select.png"
-      } else {
-        this.url = "../../dist/nosel.png"
-      }
-    }
+   //  picChange() {
+   //    if (this.url == "../../dist/nosel.png") {
+   //      this.url = "../../dist/select.png"
+   //    } else {
+   //      this.url = "../../dist/nosel.png"
+   //    }
+   //  }
   },
   mounted() {
     document.getElementById('music').play();
@@ -113,7 +114,7 @@ export default {
 <style scoped lang="scss">
 @import "../../assets/common.scss";
 .bottom-margin {
-  margin-top: px2rem(10px);
+  margin-top: px2rem(20px);
   margin-bottom: px2rem(27px);
 }
 .onoff {
@@ -131,10 +132,40 @@ export default {
   font-size: px2rem(16px);
   text-align: center;
 }
-.xieyi {
-  font-size: px2rem(12px);
-  color: #cca758;
-  margin-top: px2rem(49px);
+.agreement {
+   position: fixed;
+   left: 0;
+   bottom: px2rem(90px);
+   padding: 0 px2rem(40px);
+   .radio{
+      width: px2rem(14px);
+      height: px2rem(14px);
+      float: left;
+      margin-right: px2rem(10px);
+      border-radius: 50%;
+      border: px2rem(1px) solid #999;
+      position: relative;
+      &.agree{
+         border-color: #48ccf2;
+         &:before{
+            width: px2rem(9px);
+            height: px2rem(9px);
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            background: #48ccf2;
+            border-radius: 50%;
+            transform: translateX(-50%) translateY(-50%);
+         }
+      }
+   }
+   span{
+      float: left;
+      font-size: px2rem(12px);
+      width: px2rem(260px);
+   }
+  
 }
 .tip-title-bottom {
   font-size: px2rem(12px);
@@ -147,79 +178,80 @@ export default {
   width: px2rem(355px);
   margin: 0 auto;
 }
-.bottom-btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: px2rem(348px);
-  background: -moz-linear-gradient( top,#FF8586,#D81618);
-  background:  -webkit-linear-gradient( top,#FF8586,#D81618);
-  background: -o-linear-gradient( top,#FF8586,#D81618);
-  background: linear-gradient( top,#FF8586,#D81618);
-  font-size: px2rem(15px);
-  color: #fff;
-  height: px2rem(40px);
-  border-radius: px2rem(8px);
-  margin: px2rem(20px) auto 0 auto;
+.handleNext{
+   position: fixed;
+   width: px2rem(300px);
+   height: px2rem(40px);
+   border-radius: px2rem(5px);
+   background-image: url(../../assets/images/btnBg2.svg);
+   font-size: px2rem(16px);
+   box-shadow: 0 5px 10px rgba(70,127,157,0.3);
+   margin-top: px2rem(60px);
+   border: 0;
+   left: 50%;
+   margin-left: px2rem(-150px);
+   bottom: px2rem(30px);
+   color: #fff;
+   &:disabled{
+      background: #999;
+      box-shadow: none;
+   }
 }
 .state {
-  display: flex;
+   width: px2rem(290px);
+  overflow: hidden;
+  clear: both;
   margin: 0 auto;
-  width: px2rem(220px);
-  height: px2rem(68px);
-  font-size: px2rem(14px);
-  justify-content: space-around;
-  align-items: center;
-}
-.one {
-  width: px2rem(20px);
-  height: px2rem(20px);
-  background: #00ce27;
-  border-radius: 50%;
-  line-height: px2rem(20px);
-  text-align: center;
-  color: #fff;
-}
-.two {
-  width: px2rem(40px);
-  height: px2rem(5px);
-  background: #00ce27;
-}
-.tree {
-  width: px2rem(40px);
-  height: px2rem(5px);
-  background: #D81618;
-}
-.four {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  width: px2rem(20px);
-  height: px2rem(20px);
-  background: #D81618;
-}
-.five {
-  width: px2rem(40px);
-  height: px2rem(5px);
-  background: #D81618;
-}
-.six {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: px2rem(40px);
-  height: px2rem(5px);
-  background: #d8d8d8;
-}
-.seven {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: px2rem(20px);
-  height: px2rem(20px);
-  background: #d8d8d8;
-  border-radius: 50%;
+  padding: px2rem(20px) 0;
+  *{
+     float: left;
+  }
+  span{
+     width: px2rem(20px);
+     height: px2rem(20px);
+     border-radius: 50%;
+     background: #d8d8d8;
+     border: px2rem(5px) solid transparent;
+     font-size: px2rem(14px);
+     color: #fff;
+     text-align: center;
+     line-height: px2rem(20px);
+     background-clip: padding-box;
+     &.active{
+        background-color: #44ceef;
+        border: px2rem(5px) solid rgba(73,204,243,0.3);
+        background-clip: padding-box;
+     }
+     &.pass{
+        background-color: #44ceef;
+        background-clip: adding-box;
+     }
+  }
+  .line{
+     width: px2rem(80px);
+     height: px2rem(4px);
+     font-size: 0;
+     background: #d8d8d8;
+     border-radius: px2rem(2px);
+     margin-top: px2rem(12px);
+     margin: px2rem(12px) px2rem(10px);
+     position: relative;
+     &.active{
+        &:before{
+           content: '';
+           position: absolute;
+           width: px2rem(40px);
+           height: px2rem(4px);
+           border-radius: px2rem(2px);
+           background:#44ceef;
+           left: 0;
+           top: 0;
+        }
+     }
+     &.blue{
+        background: #44ceef;
+     }
+  }
 }
 .dingdan-info {
   border: px2rem(1px) solid #e0e0e0;
@@ -258,11 +290,11 @@ export default {
   flex: 1;
 }
 .img {
-  width: px2rem(40px);
+  width: px2rem(60px);
   justify-content: center;
   align-items: center;
   display: flex;
-  height: px2rem(40px);
+  height: px2rem(60px);
   margin: 0 auto;
 }
 .img img {
@@ -272,16 +304,21 @@ export default {
   text-align: center;
 }
 .tips {
-  border-radius: px2rem(10px);
   display: flex;
   margin: 0 auto;
   margin-top: px2rem(39px);
   width: px2rem(304px);
   justify-content: center;
   align-items: center;
-  font-size: px2rem(11px);
-  color: #fff;
+  font-size: px2rem(12px);
   height: px2rem(20px);
-  background: #D81618;
+  color: #D81618;
+}
+.voice {
+  width: px2rem(30px);
+  height: px2rem(30px);
+  position: absolute;
+  right: px2rem(10px);
+  top: px2rem(80px);
 }
 </style>
