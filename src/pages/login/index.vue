@@ -1,11 +1,25 @@
 <template>
   <div class="wrap">
-    <div class="phone">手机号登录</div>
-    <mt-field label="手机号" type="tel" placeholder="请输入新的手机号" v-model="phone"></mt-field>
-    <mt-field label="验证码" type="number" v-model="code" placeholder="请输入验证码" class="getcode">
+     <div class="logo">
+        <img src="../../assets/images/logo.svg" alt=""/>
+     </div>
+     <div class="form">
+        <div class="item">
+           <span class="icon-user"></span>
+           <input type="text" placeholder="请输入手机号码" v-model="phone"/>
+        </div>
+        <div class="item">
+           <span class="icon-psw"></span>
+           <input type="number" placeholder="请输入验证码" v-model="code"/>
+           <button @click="codeClick">{{tip}}</button>
+        </div>
+        <button class="handleLogin" @click="login">登录</button>
+     </div>
+    <!-- <mt-field label="手机号" type="tel" ></mt-field>
+    <mt-field label="验证码" type="number" v-model="code" placeholder="" class="getcode">
       <span class="btn-code" @click="codeClick">{{tip}}</span>
     </mt-field>
-    <div class="bottom-btn" @click="login">登录</div>
+    <div class="bottom-btn" @click="login">登录</div> -->
     <!-- <footer>爱义行，让洗车变得简单快乐</footer> -->
   </div>
 </template>
@@ -195,40 +209,87 @@ export default {
 @import "../../assets/common.scss";
 .wrap {
   height: 100%;
-  background: #f5f5f5;
+  background-image: url(../../assets/images/bg.jpg);
+  background-size: cover;
 }
-.bottom-btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: px2rem(348px);
-  background: -moz-linear-gradient( top,#FF8586,#D81618);
-  background:  -webkit-linear-gradient( top,#FF8586,#D81618);
-  background: -o-linear-gradient( top,#FF8586,#D81618);
-  background: linear-gradient( top,#FF8586,#D81618);
-  font-size: px2rem(15px);
-  color: #fff;
-  height: px2rem(40px);
-  border-radius: px2rem(8px);
-  margin: px2rem(30px) auto 0 auto;
-}
-.phone {
-  height: px2rem(78px);
-  font-size: px2rem(17px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.btn-code {
-  color: #7a7979;
-}
-footer {
-  margin-top: px2rem(30px);
+
+.logo {
   width: 100%;
-  height: px2rem(15px);
-  font-size: px2rem(13px);
-  text-align: center;
-  font-weight: 500;
-  color: #6d6d6d;
+  padding: px2rem(60px) 0;
+  img{
+     width: px2rem(300px);
+     display: block;
+     margin: 0 auto;
+  }
+}
+.form{
+   box-sizing: border-box;
+   padding: 0 px2rem(40px);
+   .item{
+      height: px2rem(30px);
+      overflow: hidden;
+      clear: both;
+      border-bottom: 1px solid #d8d8d8;
+      margin-bottom: 20px;
+      padding: px2rem(7px) 0;
+      *{
+         float: left;
+      }
+      span{
+         width: px2rem(24px);
+         height: px2rem(24px);
+         background-size: cover;
+         background-position: center center;
+         background-repeat: no-repeat;
+         margin-top: px2rem(5px);
+         &.icon-user{
+            background-image: url(../../assets/images/icon-user.svg);
+         }
+         &.icon-psw{
+            background-image: url(../../assets/images/icon-psw.svg);
+         }
+      }
+      input{
+         border: 0;
+         line-height: px2rem(30px);
+         background: transparent;
+         margin-left: px2rem(10px);
+         color: #fff;
+         outline: none;
+         font-size: px2rem(14px);
+         &::-webkit-input-placeholder{
+            color: #fff;
+         }
+         &[type="text"]{
+            width: px2rem(260px);
+         }
+         &[type="number"]{
+            width: px2rem(160px);
+         }
+      }
+      button{
+         width: px2rem(90px);
+         height: px2rem(30px);
+         background-image: url(../../assets/images/btnBg.svg);
+         background-size: 100% 100%;
+         float: right;
+      }
+   }
+   button{
+      border: 0;
+      background-size: 100% 100%;
+      background-color: transparent;
+      color: #fff;
+      outline: none;
+   }
+   .handleLogin{
+      width: 100%;
+      height: px2rem(40px);
+      border-radius: px2rem(5px);
+      background-image: url(../../assets/images/btnBg2.svg);
+      font-size: px2rem(16px);
+      box-shadow: 0 5px 10px rgba(70,127,157,0.3);
+      margin-top: px2rem(60px);
+   }
 }
 </style>
