@@ -145,6 +145,7 @@ export default {
       border-radius: 50%;
       border: px2rem(1px) solid #999;
       position: relative;
+      margin-top: px2rem(1px);
       &.agree{
          border-color: #48ccf2;
          &:before{
