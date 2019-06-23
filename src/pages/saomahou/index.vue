@@ -1,17 +1,14 @@
 <template>
   <div class="wrap">
     <!-- <audio preload id="music" src="http://yima.52shuzhe.cn/dist/start.wav"></audio> -->
-    <div class="yuyin">
-      <img src="../../assets/yuyin.png" alt>
-    </div>
+    <img class="voice" src="../../assets/images/icon-voice.svg" alt>
     <div class="inner">
       <div class="state">
-        <div class="one">1</div>
-        <div class="two"></div>
-        <div class="tree"></div>
-        <div class="four">2</div>
-        <div class="five"></div>
-        <div class="six">3</div>
+         <span class="active">1</span>
+         <div class="line active"></div>
+         <span>2</span>
+         <div class="line"></div>
+         <span>3</span>
       </div>
       <div class="tip-title">确认车辆是否已停到指定位置</div>
       <div class="tip-title-bottom">通过洗车机两侧辅助镜查看</div>
@@ -19,12 +16,10 @@
         <img src="../../assets/enter.png" alt>
       </div>
       <div class="phone">
-        <span class="label">服务热线</span>400-885-6600
+        <span class="label">服务热线：</span>400-885-6600
       </div>
     </div>
-    <div class="fixed">
-      <div class="bottom-btn" @click="next">下一步</div>
-    </div>
+    <button class="handleNext" @click="next">下一步</button>
   </div>
 </template>
 <script>
@@ -112,14 +107,13 @@ export default {
     // document.addEventListener("WeixinJSBridgeReady", function () {
     //   document.getElementById('music').play();
     // }, false);
-    this.usestate()
+    this.usestate();
     if (this.openId != null) {
       this.$ajax({
         method: 'post',
         url: "member/isLogin",
         data: this.$qs.stringify({ openId: this.openId })
       }).then(res => {
-        console.log(res)
         if (res.data.code == '0000') {
           if (res.data.data == false) {
             Toast('未登录,3秒后跳转')
@@ -145,7 +139,16 @@ export default {
 
 <style scoped lang="scss">
 @import "../../assets/common.scss";
+*{
+   margin: 0;
+   padding: 0;
+}
+html, body{
+   width: 100%;
+   height: 100%;
+}
 .wrap {
+  height: 100%;
   height: 100%;
   position: relative;
   background: #f5f5f5;
@@ -181,55 +184,68 @@ export default {
   margin: 0 auto;
 }
 .state {
-  display: flex;
+   width: px2rem(290px);
+  overflow: hidden;
+  clear: both;
   margin: 0 auto;
-  width: px2rem(220px);
-  height: px2rem(68px);
-  font-size: px2rem(14px);
-  justify-content: space-around;
-  align-items: center;
+  padding: px2rem(20px) 0;
+  *{
+     float: left;
+  }
+  span{
+     width: px2rem(20px);
+     height: px2rem(20px);
+     border-radius: 50%;
+     background: #d8d8d8;
+     border: px2rem(5px) solid transparent;
+     font-size: px2rem(14px);
+     color: #fff;
+     text-align: center;
+     line-height: px2rem(20px);
+     background-clip: padding-box;
+     &.active{
+        background: #44ceef;
+        border: px2rem(5px) solid rgba(73,204,243,0.3);
+        background-clip: padding-box;
+     }
+  }
+  .line{
+     width: px2rem(80px);
+     height: px2rem(4px);
+     font-size: 0;
+     background: #d8d8d8;
+     border-radius: px2rem(2px);
+     margin-top: px2rem(12px);
+     margin: px2rem(12px) px2rem(10px);
+     position: relative;
+     &.active{
+        &:before{
+           content: '';
+           position: absolute;
+           width: px2rem(40px);
+           height: px2rem(4px);
+           border-radius: px2rem(2px);
+           background:#44ceef;
+           left: 0;
+           top: 0;
+        }
+     }
+  }
 }
-.one {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: px2rem(20px);
-  height: px2rem(20px);
-  background: #D81618;
-  border-radius: 50%;
-}
-.two {
-  width: px2rem(40px);
-  height: px2rem(5px);
-  background: #D81618;
-}
-.tree {
-  width: px2rem(40px);
-  height: px2rem(5px);
-  background: #d8d8d8;
-}
-.four {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: px2rem(20px);
-  height: px2rem(20px);
-  border-radius: 50%;
-  background: #d8d8d8;
-}
-.five {
-  width: px2rem(80px);
-  height: px2rem(5px);
-  background: #d8d8d8;
-}
-.six {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: px2rem(20px);
-  height: px2rem(20px);
-  background: #d8d8d8;
-  border-radius: 50%;
+.handleNext{
+   position: fixed;
+   width: px2rem(300px);
+   height: px2rem(40px);
+   border-radius: px2rem(5px);
+   background-image: url(../../assets/images/btnBg2.svg);
+   font-size: px2rem(16px);
+   box-shadow: 0 5px 10px rgba(70,127,157,0.3);
+   margin-top: px2rem(60px);
+   border: 0;
+   left: 50%;
+   margin-left: px2rem(-150px);
+   bottom: px2rem(30px);
+   color: #fff;
 }
 .dingdan-info {
   border: px2rem(1px) solid #e0e0e0;
@@ -267,25 +283,30 @@ export default {
   width: 100%;
 }
 .phone {
-  font-size: px2rem(11px);
+  font-size: px2rem(14px);
   text-align: center;
-  margin: px2rem(30px) 0;
+  line-height: px2rem(30px);
+  color: #5dcefc;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: px2rem(90px);
+  span{
+     padding-left: px2rem(20px);
+     background-image: url(../../assets/images/icon-phone.svg);
+     background-size: px2rem(16px) px2rem(16px);
+     background-position: left center;
+     background-repeat: no-repeat;
+     font-size: px2rem(14px);
+     line-height: px2rem(30px);
+     color: #999;
+  }
 }
-.label {
-  color: #999;
-}
-.fixed {
-  padding: px2rem(12px) 0;
-  background: #fff;
-}
-.yuyin {
+.voice {
   width: px2rem(30px);
   height: px2rem(30px);
   position: absolute;
-  right: px2rem(13px);
-  top: px2rem(9px);
-}
-.yuyin img {
-  height: 100%;
+  right: px2rem(10px);
+  top: px2rem(80px);
 }
 </style>
