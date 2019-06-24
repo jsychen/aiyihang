@@ -225,7 +225,8 @@ html, body{
            width: px2rem(40px);
            height: px2rem(4px);
            border-radius: px2rem(2px);
-           background:#44ceef;
+           background-image:url(../../assets/images/btnBg2.svg);
+           background-size: cover;
            left: 0;
            top: 0;
         }

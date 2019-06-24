@@ -232,7 +232,7 @@ export default {
      width: px2rem(80px);
      height: px2rem(4px);
      font-size: 0;
-     background: #d8d8d8;
+     background-color: #d8d8d8;
      border-radius: px2rem(2px);
      margin-top: px2rem(12px);
      margin: px2rem(12px) px2rem(10px);
@@ -244,13 +244,15 @@ export default {
            width: px2rem(40px);
            height: px2rem(4px);
            border-radius: px2rem(2px);
-           background:#44ceef;
+           background-image:url(../../assets/images/btnBg2.svg);
+           background-size: cover;
            left: 0;
            top: 0;
         }
      }
      &.blue{
-        background: #44ceef;
+        background-image:url(../../assets/images/btnBg2.svg);
+         background-size: cover;
      }
   }
 }

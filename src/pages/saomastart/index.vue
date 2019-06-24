@@ -2,26 +2,30 @@
   <div class="wrap">
     <div class="inner">
       <div class="state">
-        <div class="one">√</div>
-        <div class="two"></div>
-        <div class="tree">√</div>
-        <div class="four"></div>
-        <div class="five"></div>
-        <div class="six">3</div>
+         <span class="pass">1</span>
+         <div class="line blue"></div>
+         <span class="pass">2</span>
+         <div class="line active"></div>
+         <span class="active">3</span>
       </div>
-      <div class="tip-title">确认支付开启洗车机</div>
-      <div class="tip-title-bottom">24小时智能洗车</div>
-      <div class="dingdan-info">
-        <div class="leftpay">
-          <div class="top">{{message}}</div>
-          <div class="place">{{name}}</div>
-        </div>
-        <div class="rightpay">{{payfee}}</div>
+      <div class="tips">
+         <div class="tip-title">确认支付开启洗车机</div>
+         <div class="tip-title-bottom">24小时智能洗车</div>
       </div>
-      <div class="my-content-list" @click="ShouPup">
-        <div>洗车类型:</div>
-        <div>{{message}}</div>
-        <img class="photo-go" src="../../assets/go.png" alt>
+      <div class="orderInfo">
+         <div class="basic">
+            <div class="left">
+               <p>{{message}}</p>
+               <span>{{name}}</span>
+            </div>
+            <div class="right">
+               ￥<span>{{payfee}}</span>
+            </div>
+         </div>
+         <div class="washType" @click="ShouPup">
+            <label>洗车类型：</label>
+            <span>{{message}}</span>
+         </div>
       </div>
       <mt-popup
         class="popfont"
@@ -38,114 +42,25 @@
         </mt-picker>
       </mt-popup>
       <div class="type">支付方式</div>
-      <div class="yue-zhifu">
-        <!-- <div @click="changePic(2)" class="item-wrap bottom-wrap">
-          <div class="left">
-            <img src="../../assets/vipbg.png" width="24" height="24">
-            <span class="label">支付宝</span>
-          </div>
-          <div class="right">
-            <img
-              v-if="type==='zhifu'"
-              src="http://yima.52shuzhe.cn/dist/select.png"
-              alt
-              class="radio"
-            >
-            <img
-              v-if="type!=='zhifu'"
-              src="http://yima.52shuzhe.cn/dist/nosel.png"
-              alt
-              class="radio"
-            >
-          </div>
-        </div>
-        <div class="line"></div> -->
-       
-
-        <!-- <div class="line"></div>
-        <div @click="changePic(6)" class="item-wrap bottom-wrap">
-          <div class="left">
-            <img src="../../assets/youhuiquanbg.png" width="24" height="24">
-            <span class="label">洗车券</span>
-          </div>
-          <div class="right">
-            <img
-              v-if="type==='youhuiquan'"
-              src="http://yima.52shuzhe.cn/dist/select.png"
-              alt
-              class="radio"
-            >
-            <img
-              v-if="type!=='youhuiquan'"
-              src="http://yima.52shuzhe.cn/dist/nosel.png"
-              alt
-              class="radio"
-            >
-          </div>
-        </div> -->
-       
-        <div @click="changePic(1)" class="item-wrap bottom-wrap">
-          <div class="left">
-            <img src="../../assets/zhifubg.png" width="24" height="24">
-            <span class="label">微信支付</span>
-          </div>
-          <div class="right">
-            <img
-              v-if="type==='weixin'"
-              src="http://yima.52shuzhe.cn/dist/select.png"
-              alt
-              class="radio"
-            >
-            <img
-              v-if="type!=='weixin'"
-              src="http://yima.52shuzhe.cn/dist/nosel.png"
-              alt
-              class="radio"
-            >
-          </div>
-        </div>
-         <div class="line"></div>
-          <div @click="changePic(5)" class="item-wrap bottom-wrap">
-            <div class="left">
-               <img src="../../assets/vipbg.png" width="24" height="24">
-               <span class="label">会员卡</span>
-            </div>
-            <div class="right">
-               <img
-               v-if="type==='huiyuan'"
-               src="http://yima.52shuzhe.cn/dist/select.png"
-               alt
-               class="radio"
-               >
-               <img
-               v-if="type!=='huiyuan'"
-               src="http://yima.52shuzhe.cn/dist/nosel.png"
-               alt
-               class="radio"
-               >
-            </div>
-        </div>
-        <!-- <div class="line"></div>
-        <div @click="changePic(3)" class="item-wrap top-wrap">
-          <div class="left">
-            <img src="../../assets/zhifubg.png" width="24" height="24">
-            <span class="label">余额支付</span>
-          </div>
-          <div class="right">
-            <img
-              v-if="type==='yue'"
-              src="http://yima.52shuzhe.cn/dist/select.png"
-              alt
-              class="radio"
-            >
-            <img v-if="type!=='yue'" src="http://yima.52shuzhe.cn/dist/nosel.png" alt class="radio">
-          </div>
-        </div> -->
+      <div class="payTypes">
+         <label>
+            <span>微信支付</span>
+            <input type="radio" name="payType" value="weixin" @change="handlePayType"/>
+         </label>
+         <label>
+            <span>会员卡</span>
+            <input type="radio" name="payType" value="huiyuan" @change="handlePayType"/>
+         </label>
+         <label>
+            <span>8000m码核销</span>
+            <input type="radio" name="payType" value="hexiaoma" @change="handlePayType"/>
+         </label>
       </div>
       <div v-if="false" class="title">请选择会员卡</div>
       <img v-if="false" class="youhui-img" src="../../assets/5yuanyong.png" alt>
-      <router-link class="bottom-btn" tag="div" :to="{name: 'vipLogin', params:{ id: this.$route.params.id , washType: this.washType}}" v-if="showNextBtn">下一步</router-link>
-      <div v-if="showbtn" class="bottom-btn" @click="next">马上启动</div>
+      <router-link class="handleNext" tag="button" :to="{name: 'vipLogin', params:{ id: this.$route.params.id , washType: this.washType}}" v-if="type === 'huiyuan'">下一步</router-link>
+      <!-- <div v-if="showbtn" class="bottom-btn" @click="next">马上启动</div> -->
+      <button v-if="type === 'weixin'" class="handleNext" @click="next">马上启动</button>
       <div class="zhifuid" v-if="showhuiyuan">
         <div class="wraps" v-for="item in datalist3" :key="item.id" @click="clickid(item.id)">
           <div class="top-desc">
@@ -220,15 +135,13 @@ export default {
       payfee: '',
       wasDes: '',
       value: '',
-      type: 'youhuiquan',
+      type: 'weixin',
       openId: '',
       url1: '../../dist/nosel.png',
       url2: '../../dist/select.png',
       wxopenid: '',
       env: 0,
-      washType:1,
-      // chen
-      showNextBtn: false
+      washType:1
     }
   },
   methods: {
@@ -489,7 +402,6 @@ export default {
           break;
         case 5:
         this.type = 'huiyuan';
-         this.showNextBtn = true;
          this.showbtn = false;
            // -> /user
           // if (!this.hashuiyuan) {
@@ -525,6 +437,11 @@ export default {
           break;
       }
     },
+   //  选择支付方式
+   handlePayType: function (e) {
+      console.log(e.target.value);
+      this.type = e.target.value;
+   }
   },
 
   created() {
@@ -555,6 +472,10 @@ export default {
 
 <style scoped lang="scss">
 @import "../../assets/common.scss";
+*{
+   padding: 0;
+   margin: 0;
+}
 .chepaihao1 {
   color: #4c4c4cff;
   padding-top: px2rem(10px);
@@ -611,10 +532,6 @@ export default {
 }
 .popfont {
   width: 100%;
-}
-.my-content-list,
-.popfont {
-  font-size: px2rem(14px);
 }
 .picker-toolbar-title {
   font-size: px2rem(14px);
@@ -690,7 +607,7 @@ export default {
   padding-left: px2rem(10px);
 }
 .wrap {
-  padding-bottom: px2rem(40px);
+   padding: px2rem(15px);
   background: #f5f5f5;
 }
 
@@ -703,11 +620,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: px2rem(37px);
-}
-.inner {
-  width: px2rem(355px);
-  margin: 0 auto;
+  padding: px2rem(5px) 0;
 }
 .bottom-btn {
   display: flex;
@@ -725,89 +638,15 @@ export default {
   color: #fff;
   height: px2rem(40px);
 }
-.state {
-  display: flex;
-  margin: 0 auto;
-  width: px2rem(220px);
-  height: px2rem(68px);
-  font-size: px2rem(14px);
-  justify-content: space-around;
-  align-items: center;
-}
-.one {
-  width: px2rem(20px);
-  height: px2rem(20px);
-  background: #00ce27;
-  border-radius: 50%;
-  line-height: px2rem(20px);
-  text-align: center;
-  color: #fff;
-}
-.two {
-  width: px2rem(80px);
-  height: px2rem(5px);
-  background: #00ce27;
-}
-.tree {
-  width: px2rem(20px);
-  height: px2rem(20px);
-  background: #00ce27;
-  border-radius: 50%;
-  line-height: px2rem(20px);
-  text-align: center;
-  color: #fff;
-}
-.four {
-  width: px2rem(40px);
-  height: px2rem(5px);
-  background: #00ce27;
-}
-.five {
-  width: px2rem(40px);
-  height: px2rem(5px);
-  background:#D81618;
-}
-.six {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: px2rem(20px);
-  height: px2rem(20px);
-  background:#D81618;
-  border-radius: 50%;
-}
 .yue-zhifu {
   border-radius: px2rem(6px);
   border: px2rem(1px) solid #e0e0e0;
 }
-.dingdan-info {
-  border: px2rem(1px) solid #e0e0e0;
-  border-radius: px2rem(6px);
-  padding: 0 px2rem(12px);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: px2rem(60px);
-  background: #fff;
-  margin-top: px2rem(17px);
-}
 
-.dingdan-info .top {
-  font-size: px2rem(15px);
-}
-.dingdan-info .place {
-  font-size: px2rem(13px);
-}
-.rightpay {
-  font-size: px2rem(28px);
-  color: #ff0000;
-}
 .type {
-  display: flex;
   color: #999;
-  align-items: center;
-  height: px2rem(55px);
   font-size: px2rem(14px);
+  margin: px2rem(20px) 0 px2rem(10px);
 }
 .xia {
   width: 100%;
@@ -816,6 +655,7 @@ export default {
 }
 .wrap {
   padding-top: px2rem(10px);
+  box-sizing: border-box;
 }
 .wraps {
   border-radius: px2rem(6px);
@@ -862,10 +702,6 @@ export default {
 
   font-weight: bold;
 }
-.left {
-  padding-left: px2rem(30px);
-  display: flex;
-}
 .top {
   font-size: px2rem(12px);
   width: px2rem(100px);
@@ -886,9 +722,6 @@ export default {
 .left1 {
   padding-left: px2rem(15px);
 }
-</style>
-<style>
-@import "../../assets/common.scss";
 .radio img {
   width: px2rem(18px);
   height: px2rem(18px);
@@ -902,5 +735,174 @@ export default {
   background: #fff;
   z-index: 10;
   padding-bottom: px2rem(140px);
+}
+
+.state {
+   width: px2rem(290px);
+   overflow: hidden;
+   clear: both;
+   margin: 0 auto;
+   padding-top: px2rem(20px);
+  *{
+     float: left;
+  }
+  span{
+     width: px2rem(20px);
+     height: px2rem(20px);
+     border-radius: 50%;
+     background: #d8d8d8;
+     border: px2rem(5px) solid transparent;
+     font-size: px2rem(14px);
+     color: #fff;
+     text-align: center;
+     line-height: px2rem(20px);
+     background-clip: padding-box;
+     &.active{
+        background-color: #44ceef;
+        border: px2rem(5px) solid rgba(73,204,243,0.3);
+        background-clip: padding-box;
+     }
+     &.pass{
+        background-color: #44ceef;
+        background-clip: adding-box;
+     }
+  }
+  .line{
+     width: px2rem(80px);
+     height: px2rem(4px);
+     font-size: 0;
+     background-color: #d8d8d8;
+     border-radius: px2rem(2px);
+     margin-top: px2rem(12px);
+     margin: px2rem(12px) px2rem(10px);
+     position: relative;
+     &.active{
+        &:before{
+           content: '';
+           position: absolute;
+           width: px2rem(40px);
+           height: px2rem(4px);
+           border-radius: px2rem(2px);
+           background-image:url(../../assets/images/btnBg2.svg);
+           background-size: cover;
+           left: 0;
+           top: 0;
+        }
+     }
+     &.blue{
+         background-image:url(../../assets/images/btnBg2.svg);
+         background-size: cover;
+     }
+  }
+}
+.orderInfo{
+   // box-shadow: 0 0 5px rgba(0,0,0,0.05);
+   background: #fff;
+   border-radius: px2rem(5px);
+   margin: 0 auto;
+   
+}
+.basic{
+   overflow: hidden;
+   clear: both;
+   .left{
+      width: px2rem(200px);
+      float: left;
+      padding: px2rem(10px);
+      *{
+         line-height: px2rem(20px);
+         float: left;
+         width: 100%;
+      }
+      p{
+         font-size: px2rem(14px);
+      }
+      span{
+         font-size: px2rem(12px);
+         color: #999;
+      }
+   }
+   .right{
+      width: px2rem(60rem);
+      float: right;
+      color: #f25455;
+      margin-right: px2rem(10px);
+      margin-top: px2rem(14px);
+      font-size: px2rem(18px);
+      span{
+         color: #f25455;
+         font-size: px2rem(24px);
+      }
+   }
+}
+.washType{
+   border-top: 1px solid #eee;
+   overflow: hidden;
+   clear: both;
+   padding: px2rem(10px);
+   *{
+      font-size: px2rem(14px);
+   }
+   label{
+      float: left;
+      color: #999;
+   }
+   span{
+      float: right;
+      padding-right: px2rem(10px);
+      position: relative;
+      &:before{
+         content: '';
+         position: absolute;
+         width: px2rem(6px);
+         height: px2rem(6px);
+         border-top: 1px solid #333;
+         border-right: 1px solid #333;
+         transform: rotate(45deg);
+         right: 0;
+         top: px2rem(7px);
+      }
+   }
+}
+.tips{
+   margin: px2rem(20px) 0;
+}
+.payTypes{
+   label{
+      display: block;
+      overflow: hidden;
+      clear: both;
+      padding: px2rem(10px);
+      background: #fff;
+      border-radius: px2rem(5px);
+      margin-bottom: px2rem(10px);
+      span{
+         float: left;
+         font-size: px2rem(14px);
+      }
+      input{
+         float: right;
+         width: px2rem(20px);
+         height: px2rem(20px);
+         border: 1px solid #000;
+         border-radius: 50%;
+      }
+   }
+}
+.handleNext{
+   display: block;
+   width: px2rem(300px);
+   height: px2rem(40px);
+   border-radius: px2rem(5px);
+   background-image: url(../../assets/images/btnBg2.svg);
+   font-size: px2rem(16px);
+   box-shadow: 0 5px 10px rgba(70,127,157,0.3);
+   border: 0;
+   color: #fff;
+   margin: px2rem(60px) auto;
+   &:disabled{
+      background: #999;
+      box-shadow: none;
+   }
 }
 </style>
