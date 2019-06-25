@@ -44,16 +44,26 @@
       <div class="type">支付方式</div>
       <div class="payTypes">
          <label>
-            <span>微信支付</span>
-            <input type="radio" name="payType" value="weixin" @change="handlePayType"/>
+            <span class="icon-wx">微信支付</span>
+            <div class="radio">
+               <input type="radio" name="payType" value="weixin" @change="handlePayType"/>
+               <em></em>
+            </div>
+            
          </label>
          <label>
-            <span>会员卡</span>
-            <input type="radio" name="payType" value="huiyuan" @change="handlePayType"/>
+            <span class="icon-vip">会员卡</span>
+            <div class="radio">
+               <input type="radio" name="payType" value="huiyuan" @change="handlePayType"/>
+               <em></em>
+            </div>
          </label>
          <label>
-            <span>8000m码核销</span>
-            <input type="radio" name="payType" value="hexiaoma" @change="handlePayType"/>
+            <span class="icon-code">8000m码核销</span>
+            <div class="radio">
+               <input type="radio" name="payType" value="checkCode" @change="handlePayType"/>
+               <em></em>
+            </div>
          </label>
       </div>
       <div v-if="false" class="title">请选择会员卡</div>
@@ -103,6 +113,15 @@
         </div>
       </div>
     </div>
+    <!-- 核销码弹框 -->
+    <div class="modal" v-show="showModal">
+       <div class="inner">
+          <span class="close" @click="handleCloseModal"></span>
+          <p>请输入以8000开头的核销码</p>
+          <input type="text" v-model="checkCode"/>
+          <button class="handleNext" @click="handleCheck">点击核销</button>
+       </div>
+    </div>
   </div>
 </template>
 <script>
@@ -141,7 +160,10 @@ export default {
       url2: '../../dist/select.png',
       wxopenid: '',
       env: 0,
-      washType:1
+      washType:1,
+      // chen
+      showModal: false,
+      checkCode: ''
     }
   },
   methods: {
@@ -441,6 +463,38 @@ export default {
    handlePayType: function (e) {
       console.log(e.target.value);
       this.type = e.target.value;
+      if(this.type === 'checkCode') {
+         this.showModal = true;
+      }
+   },
+   // 关闭弹框
+   handleCloseModal: function () {
+      this.showModal = false;
+      this.checkCode = '';
+      this.type = 'weixin';
+   },
+   // 8000码核销
+   handleCheck: function () {
+      let checkCode = this.checkCode;
+      if(checkCode.indexOf('8000') !== 0) {
+         Toast('核销码格式不正确');
+         return;
+      };
+      Indicator.open();
+      this.$ajax({
+        method: 'post',
+        url: 'erpcard/iss',
+        data: this.$qs.stringify({ checkedCode: this.checkCode, openId: this.openId})
+      }).then((res) => {
+        Indicator.close();
+         if(res.data.code === '0000'){
+            Toast('支付成功');
+            return;
+         };
+         Toast(res.data.msg);
+      }).catch(err => {
+
+      });
    }
   },
 
@@ -475,6 +529,9 @@ export default {
 *{
    padding: 0;
    margin: 0;
+}
+button{
+   outline: none;
 }
 .chepaihao1 {
   color: #4c4c4cff;
@@ -879,13 +936,47 @@ export default {
       span{
          float: left;
          font-size: px2rem(14px);
+         padding-left: px2rem(25px);
+         background-size: px2rem(20px) px2rem(20px);
+         background-repeat: no-repeat;
+         background-position: left center;
       }
-      input{
-         float: right;
+      .icon-wx{
+         background-image: url(../../assets/images/icon-wx.png);
+      }
+      .icon-vip{
+         background-image: url(../../assets/images/icon-vip.png);
+      }
+      .icon-code{
+         background-image: url(../../assets/images/icon-code.png);
+      }
+      .radio{
          width: px2rem(20px);
          height: px2rem(20px);
-         border: 1px solid #000;
-         border-radius: 50%;
+         position: relative;
+         float: right;
+         input,em{
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+         }
+         em{
+            border: 1px solid #999;
+            border-radius: 50%;
+            transform: scale(0.8);
+         }
+         input{
+            opacity: 0;
+            &:checked+em{
+               background-image: url(../../assets/images/icon-checked.png);
+               background-size: cover;
+               border: 0;
+               transform: scale(1);
+            }
+         }
       }
    }
 }
@@ -905,4 +996,59 @@ export default {
       box-shadow: none;
    }
 }
+/* 弹框 */
+.modal{
+   width: 100%;
+   height: 100%;
+   position: fixed;
+   left: 0;
+   top: 0;
+   background: rgba(0,0,0,.6);
+   *{
+      box-sizing: border-box;
+   }
+   .inner{
+      width: px2rem(340px);
+      padding: px2rem(50px) px2rem(35px) px2rem(20px);
+      background: #fff;
+      border-radius: px2rem(5px);
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      >*{
+         float: left;
+         width: 100%;
+      }
+      .close{
+         width: px2rem(30px);
+         height: px2rem(30px);
+         position: absolute;
+         left: px2rem(10px);
+         top: px2rem(10px);
+         background-image: url(../../assets/images/icon-close.svg);
+         background-size: 50% 50%;
+         background-position: center center;
+         background-repeat: no-repeat;
+      }
+      p{
+         font-size: px2rem(14px);
+         color: #999;
+         line-height:px2rem(30px);
+      }
+      input{
+         width: 100%;
+         line-height: px2rem(20px);
+         padding: px2rem(10px);
+         border: 1px solid #e5e5e5;
+         border-radius: px2rem(5px);
+         outline: none;
+      }
+      button{
+         width: 100%;
+         margin: px2rem(30px) 0;
+      }
+   }
+}
 </style>
+ 
