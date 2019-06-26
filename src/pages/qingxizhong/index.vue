@@ -5,6 +5,7 @@
     <audio preload id="dala" src="http://wx1.aiyihang.com/dist/dala.mp3"></audio>
     <div class="white">
       <div class="qixibg">
+        <p>{{datadingdan.boxName}}</p>
         <!-- <img class="car" src="../../assets/car1.gif" alt v-if="startxi=='正在风干'">
          <img class="car" src="../../assets/car.gif" alt v-else>
          <img src="../../assets/line.png" alt class="lines"/>
@@ -19,8 +20,9 @@
             <div class="lefts" v-bind:style="{ transform: rotateL }"></div>
           </div>
           <div class="mask">
-            <img src="../../assets/rec.png" style="display:block;width:100%;height:100%;" v-if="isImg">
-            <img src="../../assets/rect.png" style="display:block;width:100%;height:100%;" v-else>
+            <!-- <img src="../../assets/rec.png" style="display:block;width:100%;height:100%;" v-if="isImg">
+            <img src="../../assets/rect.png" style="display:block;width:100%;height:100%;" v-else> -->
+            <img src="../../assets/images/shutDown.png"/>
           </div>
         </div>
         <div class="tops">
@@ -30,7 +32,24 @@
 
       </div>
       <div class="ad">
-         <video src="http://wx1.aiyihang.com/yetiboli.mp4" poster="../../assets/cover.png" controls x5-playsinline="" playsinline="" webkit-playsinline=""></video>
+         <img src="../../assets/images/wash-ad.png" alt="">
+      </div>
+      <div class="videos">
+         <p></p>
+         <div class="scroll">
+            <ul>
+               <li>
+                  <video src="http://wx1.aiyihang.com/yetiboli.mp4" poster="../../assets/cover.png" x5-playsinline="" playsinline="" webkit-playsinline=""></video>
+                  <h2>德国最新技术</h2>
+                  <p>液体玻璃，渡在车身形成透明保护壳，让爱车能够防污渍，抗划痕，外观更靓丽。</p>
+               </li>
+               <li>
+                  <video src="http://wx1.aiyihang.com/yetiboli.mp4" poster="../../assets/cover.png" x5-playsinline="" playsinline="" webkit-playsinline=""></video>
+                  <h2>轮胎养护保养找我们</h2>
+                  <p>专业技术，给您贴心服务</p>
+               </li>
+            </ul>
+         </div>
       </div>
       <!-- <div class="inner">
         <div class="banner">
@@ -265,6 +284,7 @@ export default {
   },
 
   created() {
+     return;
     let that = this
     let isplay=true
     let isplay1 = true
@@ -363,25 +383,30 @@ export default {
   margin-top: px2rem(18px);
 }
 .startxi{
-  color: #FFFFFF;
+  color: #d0ebff;
   font-size: px2rem(16px);
   margin-top: px2rem(11px);
 }
 .xi{
-  color: #fff;
+  color: #3f8adc;
   font-size: px2rem(13px);
   margin-top:px2rem(2px);
 }
 .qixibg{
   width:100%;
-  height: px2rem(256px);
-  background-image: url(../../assets/qixibg.png);
+  height: px2rem(280px);
+  background-image: url(../../assets/images/wash-bg.png);
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;
   flex-direction: column;
   align-items:center;
   position: relative;
+  p{
+     font-size: px2rem(18px);
+     color: #fff;
+     line-height: px2re(20px);
+  }
 }
 .clear img {
   width: 100%;
@@ -427,7 +452,7 @@ export default {
 }
 .wrap {
   overflow-x: hidden;
-  background: #fff;
+  background: #f5f5f3;
 }
 .inner {
   height: px2rem(220px);
@@ -522,9 +547,6 @@ export default {
   height: px2rem(31px);
   background: #fff;
 }
-.white {
-  background: #fff;
-}
 #map {
   height: px2rem(120px);
 }
@@ -579,24 +601,6 @@ export default {
   text-align: right;
 }
 
-// chen
-.ad{
-   margin: 0;
-   padding: px2rem(10px) 0;
-   *{
-      padding: 0;
-      margin: 0;
-   }
-   video{
-      width: 100%;
-      // height: px2rem(200px);
-   }
-   p{
-      padding: 0 px2rem(20px);
-      font-size: px2rem(14px);
-   }
-}
-
 // 环形进度条
 //css
 .circle {
@@ -605,8 +609,8 @@ export default {
   height: px2rem(140px);
   width: px2rem(140px);
   border-radius: 50%;
-  background: #7ae000; //注意这是表示当前进度的颜色
-  top: px2rem(18px);
+  background-image: linear-gradient(0deg, #4a6ff4 0%,#00d1ff 100%); //注意这是表示当前进度的颜色
+  top: px2rem(55px);
 }
 .pie-right,
 .pie-left {
@@ -614,8 +618,8 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
-  height: px2rem(140px);
-  width: px2rem(140px);
+  height: px2rem(150px);
+  width: px2rem(150px);
   border-radius: 50%;
 }
 .rights,
@@ -626,7 +630,7 @@ export default {
   height: px2rem(140px);
   width: px2rem(140px);
   border-radius: 50%;
-  background: #5f5f5f; //注意这个才不是当前进度的颜色
+  background: #183891; //注意这个才不是当前进度的颜色
 }
 // .rights {
 //   transform: rotate(30deg);
@@ -643,13 +647,26 @@ export default {
 }
 .mask {
   //我是遮罩 mask不用改 好欣慰
-  position: absolute;
-  z-index: 10;
-  top: px2rem(13.5px);
-  left: px2rem(13.5px);
   height: px2rem(115px);
   width: px2rem(115px);
-  // background-image: url(../../assets/rec.png);
+  position: absolute;
+  z-index: 10;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  background-image: url(../../assets/images/circle.png);
+  background-color: #17174a;
+  background-size: 80% 80%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  border-radius: 50%;
+  img{
+     width: 46%;
+     height:46%;
+     position: absolute;
+     left: 28%;
+     top: 28%;
+  }
 }
 .tops{
   position:absolute;
@@ -657,5 +674,77 @@ export default {
   display:flex;
   flex-direction:column;
   align-items:center;
+}
+
+/* chen */
+.ad{
+   overflow: hidden;
+   clear: both;
+   img{
+      width: 100%;
+      float: left;
+   }
+}
+.videos{
+   padding: 0 px2rem(15px);
+   margin-bottom: px2rem(15px);
+   overflow: hidden;
+   *{
+      margin: 0;
+      padding: 0;
+   }
+   >p{
+      font-size: px2rem(20px);
+      position: relative;
+      height: px2rem(40px);
+      margin: 0;
+      &:before{
+         // width: px2rem(60px);
+         height: px2rem(10px);
+         position: absolute;
+         left: 0;
+         bottom:0;
+         background: #49ccf4;
+         content: '为您优选';
+         line-height:0;
+      }
+   }
+   .scroll{
+      width: px2rem(360px);
+      overflow-x: scroll;
+   }
+   ul{
+      width: px2rem(540px);
+      list-style: none;
+      overflow: hidden;
+      clear: both;
+      li{
+         float: left;
+         width: px2rem(250px);
+         height: px2rem(210px);
+         background: #fff;
+         border-radius: px2rem(5px);
+         overflow:hidden;
+         margin-right: px2rem(20px);
+         margin-top:px2rem(10px);
+         video{
+            width: px2rem(250px);
+            float: left;
+         }
+         h2,p{
+            padding: 0 px2rem(10px);
+         }
+         h2{
+            font-size: px2rem(14px);
+            line-height: px2rem(30px);
+            color: #000;
+         }
+         p{
+            font-size:  px2rem(12px);
+            line-height: px2re(24px);
+            color: #999;
+         }
+      }
+   }
 }
 </style>
