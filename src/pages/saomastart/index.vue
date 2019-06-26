@@ -216,7 +216,8 @@ export default {
         that.wxInit(res.data.data);
       });
     },
-    alertpay(args) {
+   //  微信支付
+    alertpay(args, orderId) {
       let that = this
       WeixinJSBridge.invoke(
         'getBrandWCPayRequest', {
@@ -230,9 +231,10 @@ export default {
         function (res) {
           Indicator.close();
           if (res.err_msg == "get_brand_wcpay_request:ok") {
-            that.$router.push({              name: 'qingxizhong', params: {
+             this.handleOrder(orderId);
+            that.$router.push({ name: 'qingxizhong', params: {
                 id: that.$route.params.id
-              }            })
+            }});
           } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
             Toast('已取消支付');
           } else {
@@ -241,6 +243,25 @@ export default {
         }
       );
     },
+   //  微信支付成功推送结算订单到erp
+   handleOrder: function (orderId) {
+      let data = {
+         openId: this.openId,
+         boxUid: this.$route.params.id,
+         orderId: orderId
+      };
+      this.$ajax({
+        method: 'post',
+        url: 'erpcard/invoice',
+        data: this.$qs.stringify(data)
+      }).then((res) => {
+         if(res.data.code === '0000') {
+            console.log('微信支付成功推送结算订单到erp');
+            return;
+         }
+         console.log(res.data.msg);
+      })
+   },
     wxInit(res) {
       let that = this
       wx.config({
@@ -274,7 +295,7 @@ export default {
         if (that.env == 1) {
           // 微信内支付
           if (that.payType === 1) {
-            that.alertpay(res.data.data)
+            that.alertpay(res.data.data, orderId)
           } else {
             Indicator.close();
           }
@@ -310,6 +331,7 @@ export default {
       }
       let that = this
       Indicator.open();
+      // 插入订单记录
       this.$ajax({
         method: 'post',
         url: 'washRecord/submitWashRecord',
@@ -325,9 +347,12 @@ export default {
       }).then((res) => {
         if (that.payType == 5 || that.payType == 6 || that.payType == 3) {
           Indicator.close();
-          that.$router.push({            name: 'qingxizhong', params: {
+          that.$router.push({            
+             name: 'qingxizhong', 
+             params: {
               id: that.$route.params.id
-            }          })
+            }          
+         })
           return;
         }
         that.pay(res.data.data)
@@ -491,8 +516,6 @@ export default {
    },
    // 生成订单
    addOrderRecord: function () {
-      let info = this.info;
-      if(!info.carList) return;
       let boxId = this.$route.params.id;
       let data = {
          openId: this.openId,
