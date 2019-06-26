@@ -46,7 +46,7 @@
          <label>
             <span class="icon-wx">微信支付</span>
             <div class="radio">
-               <input type="radio" name="payType" value="weixin" @change="handlePayType"/>
+               <input type="radio" value="weixin" v-model="type"/>
                <em></em>
             </div>
             
@@ -54,14 +54,14 @@
          <label>
             <span class="icon-vip">会员卡</span>
             <div class="radio">
-               <input type="radio" name="payType" value="huiyuan" @change="handlePayType"/>
+               <input type="radio" value="huiyuan" v-model="type"/>
                <em></em>
             </div>
          </label>
          <label>
             <span class="icon-code">8000m码核销</span>
             <div class="radio">
-               <input type="radio" name="payType" value="checkCode" @change="handlePayType"/>
+               <input type="radio" value="checkCode" v-model="type"/>
                <em></em>
             </div>
          </label>
@@ -118,7 +118,7 @@
        <div class="inner">
           <span class="close" @click="handleCloseModal"></span>
           <p>请输入以8000开头的核销码</p>
-          <input type="text" v-model="checkCode"/>
+          <input type="text" v-model.trim="checkCode"/>
           <button class="handleNext" @click="handleCheck">点击核销</button>
        </div>
     </div>
@@ -459,14 +459,6 @@ export default {
           break;
       }
     },
-   //  选择支付方式
-   handlePayType: function (e) {
-      console.log(e.target.value);
-      this.type = e.target.value;
-      if(this.type === 'checkCode') {
-         this.showModal = true;
-      }
-   },
    // 关闭弹框
    handleCloseModal: function () {
       this.showModal = false;
@@ -484,18 +476,40 @@ export default {
       this.$ajax({
         method: 'post',
         url: 'erpcard/iss',
-        data: this.$qs.stringify({ checkedCode: this.checkCode, openId: this.openId})
+        data: this.$qs.stringify({ checkCode: this.checkCode, openId: this.openId})
       }).then((res) => {
         Indicator.close();
          if(res.data.code === '0000'){
-            Toast('支付成功');
+            Toast('核销成功');
+            this.addOrderRecord();
             return;
          };
          Toast(res.data.msg);
       }).catch(err => {
 
       });
-   }
+   },
+   // 生成订单
+   addOrderRecord: function () {
+      let info = this.info;
+      if(!info.carList) return;
+      let boxId = this.$route.params.id;
+      let data = {
+         openId: this.openId,
+         payType: 9,
+         washType: this.washType,
+         boxUid: boxId
+      };
+      Indicator.open('洗车机启动中...');
+      this.$ajax.get('washRecord/submitWashRecord', {params: data}).then( res => {
+         Indicator.close();
+         if(res.data.code === '0000'){
+            this.$router.push({name: 'qingxizhong', params: {id: boxId}});
+            return;
+         }
+         Toast(res.data.msg);
+      })
+   },
   },
 
   created() {
@@ -520,6 +534,11 @@ export default {
         this.env = 3
         console.log(this.env)
       }
+  },
+  watch: {
+     'type': function (val) {
+         this.showModal = val === 'checkCode';
+     }
   }
 }
 </script>
