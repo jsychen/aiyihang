@@ -205,7 +205,9 @@ export default {
           case '洗车已完成':
             that.startxi  =  res.data.data
             clearInterval(that.timer);
-            that.$router.push({ name: 'fuwupingjia', params: { id: that.orderid }})
+            that.$router.push({name: 'fuwupingjia', params: {
+                id: that.orderid
+              }            })
             break;
           case '正在刷洗':
             that.startxi  =  res.data.data
