@@ -15,7 +15,7 @@
             :trail-color="['#183891']"
           ></x-circle>
           <button class="stop">
-            <span @click="handleShutDown">紧急停止</span>
+            <span @click="showModal = true">紧急停止</span>
           </button>
         </div>
         <div class="tops">
@@ -55,22 +55,6 @@
           </ul>
         </div>
       </div>
-      <!-- <div class="inner">
-        <div class="banner">
-          
-        </div>
-      </div>-->
-      <!-- <div class="desc">改变你的洗车方式</div>
-      <div class="two-line">
-        <div class="left"></div>
-        <div class="right"></div>
-      </div>
-      <div class="state">深度洗刷</div>
-      <div class="tuichu">有效提升清洁度</div>
-      <div class="bg"></div>-->
-      <!--<div class="reset" @click="reset">一键复位</div>-->
-      <!--<div class="bg-white"></div>-->
-      <!--<div id="map"></div>-->
       <div class="dingdan-info">
         <div class="head">
           <div class="left"></div>
@@ -151,6 +135,18 @@
         </div>
       </div>
     </div>
+    <!-- 弹框提示 -->
+    <div class="modal" v-show="showModal">
+       <div class="inner">
+          <img class="icon" src="../../assets/images/icon-warning.png" alt="">
+          <h2>是否确定停止洗车机？</h2>
+          <p>停止后洗车机会复位到初始状态，并终止本次洗车服务</p>
+          <div class="btns">
+            <button class="cancel">取消</button>
+            <button class="confirm" @click="handleShutDown">确定</button>
+          </div>
+       </div>
+    </div>
   </div>
 </template>
 <script>
@@ -163,6 +159,7 @@ export default {
   },
   data() {
     return {
+      showModal: false,
       datadingdan: {},
       username: "",
       openId: "",
@@ -178,23 +175,6 @@ export default {
     };
   },
   methods: {
-    reset() {
-      let that = this;
-      this.$ajax({
-        method: "post",
-        url: "box/reset",
-        data: this.$qs.stringify({
-          openId: that.openId,
-          fboxUid: that.$route.params.id
-        })
-      })
-        .then(res => {
-          Toast(res.data.msg);
-        })
-        .catch(err => {
-          Toast("无复位功能");
-        });
-    },
     getdingdaninfo() {
       let that = this;
       this.$ajax({
@@ -204,13 +184,12 @@ export default {
           openId: that.openId,
           fboxUid: that.$route.params.id
         })
-      })
-        .then(res => {
+      }).then(res => {
           that.orderid = res.data.data.orderId;
           that.datadingdan = res.data.data;
-        })
-        .catch(err => {});
+        }).catch(err => {});
     },
+    // 获取清洗状态
     watchstate() {
       let that = this;
       this.$ajax({
@@ -220,8 +199,7 @@ export default {
           fboxUid: that.$route.params.id,
           openId: that.openId
         })
-      })
-        .then(res => {
+      }).then(res => {
           switch (res.data.data) {
             case "洗车已完成":
               that.startxi = res.data.data;
@@ -281,8 +259,7 @@ export default {
               //document.getElementById('fenggan').play();
               break;
           }
-        })
-        .catch(err => {
+        }).catch(err => {
           // alert(JSON.stringify(err.response.data.msg))
         });
     },
@@ -763,5 +740,67 @@ export default {
     border-radius: 50%;
     font-weight: bold;
   }
+}
+button{
+  outline: none;
+}
+/* 弹框 */
+.modal{
+   width: 100%;
+   height: 100%;
+   position: fixed;
+   left: 0;
+   top: 0;
+   background: rgba(0,0,0,.6);
+   *{
+      box-sizing: border-box;
+   }
+   .inner{
+      width: px2rem(300px);
+      padding: px2rem(20px);
+      background: #fff;
+      border-radius: px2rem(5px);
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      text-align: center;
+      img{
+        width: px2rem(80px);
+        display: block;
+        margin: 0 auto px2rem(20px);
+      }
+      h2{
+        font-size: px2rem(18px);
+        margin-bottom: px2rem(10px);
+        font-weight: normal;
+      }
+      p{
+        font-size: px2rem(14px);
+      }
+      .btns{
+        overflow: hidden;
+        clear: both;
+        margin-top: px2rem(30px);
+        button{
+          width: px2rem(100px);
+          height: px2rem(40px);
+          background-origin: 0;
+          border-radius: px2rem(5px);
+        }
+        .cancel{
+          float: left;
+          color: #888;
+          background: #d8d8d8;
+          box-shadow: 0 px2rem(5px) px2rem(5px) rgba(216,216,216,.4);
+        }
+        .confirm{
+          float: right;
+          color: #fff;
+          background: #0b28a7;
+          box-shadow: 0 px2rem(5px) px2rem(5px) rgba(11,40,167,.4);
+        }
+      }
+   }
 }
 </style>
