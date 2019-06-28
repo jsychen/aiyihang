@@ -6,66 +6,60 @@
     <div class="white">
       <div class="qixibg">
         <p>{{datadingdan.boxName}}</p>
-        <!-- <img class="car" src="../../assets/car1.gif" alt v-if="startxi=='正在风干'">
-         <img class="car" src="../../assets/car.gif" alt v-else>
-         <img src="../../assets/line.png" alt class="lines"/>
-         <span class="startxi">{{startxi}}</span>
-         <span class="xi">{{startxi}},请勿操作</span> -->
-
-        <!-- <div class="circle">
-          <div class="pie-right"> 
-            <div class="rights" v-bind:style="{ transform: rotateR  }"></div>
-          </div>
-          <div class="pie-left">
-            <div class="lefts" v-bind:style="{ transform: rotateL }"></div>
-          </div>
-          <div class="mask">
-            <img src="../../assets/images/shutDown.png"/>
-          </div>
-        </div> -->
         <div class="circle">
           <x-circle
             :percent="percent"
             :stroke-width="5"
             :trail-width="1"
             :stroke-color="['#4a6ef4', '#00d2ff']"
-            :trail-color="['#183891']">
-          </x-circle>
+            :trail-color="['#183891']"
+          ></x-circle>
           <button class="stop">
-            <span>紧急停止</span>
+            <span @click="handleShutDown">紧急停止</span>
           </button>
         </div>
         <div class="tops">
-            <span class="startxi">{{startxi}}</span>
-         <span class="xi">{{startxi}},请勿操作</span>
+          <span class="startxi">{{startxi}}</span>
+          <span class="xi">{{startxi}},请勿操作</span>
         </div>
-
       </div>
       <div class="ad">
-         <img src="../../assets/images/wash-ad.png" alt="">
+        <img src="../../assets/images/wash-ad.png" alt>
       </div>
       <div class="videos">
-         <p></p>
-         <div class="scroll">
-            <ul>
-               <li>
-                  <video src="http://wx1.aiyihang.com/yetiboli.mp4" poster="../../assets/cover.png" x5-playsinline="" playsinline="" webkit-playsinline=""></video>
-                  <h2>德国最新技术</h2>
-                  <p>液体玻璃，渡在车身形成透明保护壳，让爱车能够防污渍，抗划痕，外观更靓丽。</p>
-               </li>
-               <li>
-                  <video src="http://wx1.aiyihang.com/yetiboli.mp4" poster="../../assets/cover.png" x5-playsinline="" playsinline="" webkit-playsinline=""></video>
-                  <h2>轮胎养护保养找我们</h2>
-                  <p>专业技术，给您贴心服务</p>
-               </li>
-            </ul>
-         </div>
+        <p></p>
+        <div class="scroll">
+          <ul>
+            <li>
+              <video
+                src="http://wx1.aiyihang.com/yetiboli.mp4"
+                poster="../../assets/cover.png"
+                x5-playsinline
+                playsinline
+                webkit-playsinline
+              ></video>
+              <h2>德国最新技术</h2>
+              <p>液体玻璃，渡在车身形成透明保护壳，让爱车能够防污渍，抗划痕，外观更靓丽。</p>
+            </li>
+            <li>
+              <video
+                src="http://wx1.aiyihang.com/yetiboli.mp4"
+                poster="../../assets/cover.png"
+                x5-playsinline
+                playsinline
+                webkit-playsinline
+              ></video>
+              <h2>轮胎养护保养找我们</h2>
+              <p>专业技术，给您贴心服务</p>
+            </li>
+          </ul>
+        </div>
       </div>
       <!-- <div class="inner">
         <div class="banner">
           
         </div>
-      </div> -->
+      </div>-->
       <!-- <div class="desc">改变你的洗车方式</div>
       <div class="two-line">
         <div class="left"></div>
@@ -73,7 +67,7 @@
       </div>
       <div class="state">深度洗刷</div>
       <div class="tuichu">有效提升清洁度</div>
-      <div class="bg"></div> -->
+      <div class="bg"></div>-->
       <!--<div class="reset" @click="reset">一键复位</div>-->
       <!--<div class="bg-white"></div>-->
       <!--<div id="map"></div>-->
@@ -160,8 +154,9 @@
   </div>
 </template>
 <script>
-import { Toast } from 'mint-ui';
-import { XCircle } from 'vux'
+import { Toast } from "mint-ui";
+import { XCircle } from "vux";
+import { setTimeout } from 'timers';
 export default {
   components: {
     XCircle
@@ -169,182 +164,232 @@ export default {
   data() {
     return {
       datadingdan: {},
-      username: '',
-      openId: '',
-      newusername: '',
+      username: "",
+      openId: "",
+      newusername: "",
       timer: null,
-      startxi:'预洗状态',
-      timers:null,
-      timeCount:0,
-      rotateL:0,
-      rotateR:0,
-      isImg:true,
+      startxi: "预洗状态",
+      timers: null,
+      timeCount: 0,
+      rotateL: 0,
+      rotateR: 0,
+      isImg: true,
       percent: 0
-    }
+    };
   },
   methods: {
     reset() {
-      let that = this
+      let that = this;
       this.$ajax({
-        method: 'post',
-        url: 'box/reset',
-        data: this.$qs.stringify({ openId: that.openId, fboxUid: that.$route.params.id })
-      }).then((res) => {
-        Toast(res.data.msg);
-      }).catch(err => {
-        Toast('无复位功能');
-      });
+        method: "post",
+        url: "box/reset",
+        data: this.$qs.stringify({
+          openId: that.openId,
+          fboxUid: that.$route.params.id
+        })
+      })
+        .then(res => {
+          Toast(res.data.msg);
+        })
+        .catch(err => {
+          Toast("无复位功能");
+        });
     },
     getdingdaninfo() {
-      let that = this
+      let that = this;
       this.$ajax({
-        method: 'post',
-        url: 'washRecord/getNewest',
-        data: this.$qs.stringify({ openId: that.openId, fboxUid: that.$route.params.id })
-      }).then((res) => {
-        that.orderid = res.data.data.orderId
-        that.datadingdan = res.data.data
-      }).catch(err => {
-
-      });
+        method: "post",
+        url: "washRecord/getNewest",
+        data: this.$qs.stringify({
+          openId: that.openId,
+          fboxUid: that.$route.params.id
+        })
+      })
+        .then(res => {
+          that.orderid = res.data.data.orderId;
+          that.datadingdan = res.data.data;
+        })
+        .catch(err => {});
     },
     watchstate() {
-      let that = this
+      let that = this;
       this.$ajax({
-        method: 'post',
-        url: 'box/refreshWashStatus',
-        data: this.$qs.stringify({ fboxUid: that.$route.params.id, openId: that.openId })
-      }).then((res) => {
-         
-        switch (res.data.data) {
-          case '洗车已完成':
-            that.startxi  =  res.data.data
-            clearInterval(that.timer);
-            that.$router.push({ name: 'fuwupingjia', params: { id: that.orderid }})
-            break;
-          case '正在刷洗':
-            that.startxi  =  res.data.data
-            // document.getElementById('shuaxi').play();
-            break;
-          case '正在打蜡':
-            that.startxi  =  res.data.data
-            // Toast(res.data.data);
-            // document.getElementById('dala').play();
-            break;
-          case '正在风干':
-            that.startxi  =  res.data.data
-            // Toast(res.data.data);
-            // document.getElementById('fenggan').play();
-            break;
-          case '洗车机已开闸':
-            Toast(res.data.data);
-            that.startxi  =  res.data.data
-            //document.getElementById('fenggan').play();
-            break;
-          case '正在喷泡沫':
-            // Toast(res.data.data);
-            that.startxi  =  res.data.data
-            //document.getElementById('fenggan').play();
-            break;
-          case '洗车机已关闸':
-            Toast(res.data.data);
-            that.startxi  =  res.data.data
-            //document.getElementById('fenggan').play();
-            break;
-          case '洗车机已停止':
-            Toast(res.data.data);
-            that.startxi  =  res.data.data
-            //document.getElementById('fenggan').play();
-            break;
-          case '正在洗车中':
-            Toast(res.data.data);
-            that.startxi  =  res.data.data
-            //document.getElementById('fenggan').play();
-            break;
-          case '车辆已停车到位':
-            Toast(res.data.data);
-            that.startxi  =  res.data.data
-            //document.getElementById('fenggan').play();
-            break;
-          case '准备洗车中':
-            Toast(res.data.data);
-            that.startxi  =  res.data.data
-            //document.getElementById('fenggan').play();
-            break;
-        }
-
-      }).catch(err => {
-        // alert(JSON.stringify(err.response.data.msg))
-      });
+        method: "post",
+        url: "box/refreshWashStatus",
+        data: this.$qs.stringify({
+          fboxUid: that.$route.params.id,
+          openId: that.openId
+        })
+      })
+        .then(res => {
+          switch (res.data.data) {
+            case "洗车已完成":
+              that.startxi = res.data.data;
+              clearInterval(that.timer);
+              that.$router.push({
+                name: "fuwupingjia",
+                params: { id: that.orderid }
+              });
+              break;
+            case "正在刷洗":
+              that.startxi = res.data.data;
+              // document.getElementById('shuaxi').play();
+              break;
+            case "正在打蜡":
+              that.startxi = res.data.data;
+              // Toast(res.data.data);
+              // document.getElementById('dala').play();
+              break;
+            case "正在风干":
+              that.startxi = res.data.data;
+              // Toast(res.data.data);
+              // document.getElementById('fenggan').play();
+              break;
+            case "洗车机已开闸":
+              Toast(res.data.data);
+              that.startxi = res.data.data;
+              //document.getElementById('fenggan').play();
+              break;
+            case "正在喷泡沫":
+              // Toast(res.data.data);
+              that.startxi = res.data.data;
+              //document.getElementById('fenggan').play();
+              break;
+            case "洗车机已关闸":
+              Toast(res.data.data);
+              that.startxi = res.data.data;
+              //document.getElementById('fenggan').play();
+              break;
+            case "洗车机已停止":
+              Toast(res.data.data);
+              that.startxi = res.data.data;
+              //document.getElementById('fenggan').play();
+              break;
+            case "正在洗车中":
+              Toast(res.data.data);
+              that.startxi = res.data.data;
+              //document.getElementById('fenggan').play();
+              break;
+            case "车辆已停车到位":
+              Toast(res.data.data);
+              that.startxi = res.data.data;
+              //document.getElementById('fenggan').play();
+              break;
+            case "准备洗车中":
+              Toast(res.data.data);
+              that.startxi = res.data.data;
+              //document.getElementById('fenggan').play();
+              break;
+          }
+        })
+        .catch(err => {
+          // alert(JSON.stringify(err.response.data.msg))
+        });
     },
     changeProcess(value) {
-      let time = 4*60 + 40;
-      var num = value * 5 / 14;
+      let time = 4 * 60 + 40;
+      var num = (value * 5) / 14;
       this.percent = num;
-      if(this.timeCount >= time){
-         clearInterval(this.timers);
+      if (this.timeCount >= time) {
+        clearInterval(this.timers);
       }
+    },
+    // 紧急停止
+    handleShutDown: function () {
+      Indicator.open();
+      this.$ajax({
+        method: "post",
+        url: "box/emerygencyStop",
+        data: this.$qs.stringify({
+          openId: that.openId,
+          fboxUid: that.$route.params.id
+        })
+      }).then(res => {
+        if(res.data.code === '0000'){
+          this.handleReset();
+          return;
+        };
+        Indicator.close();
+        Toast(res.data.data);
+      })
+    },
+    // 复位
+    handleReset: function () {
+      this.$ajax({
+        method: "post",
+        url: "box/reset",
+        data: this.$qs.stringify({
+          openId: that.openId,
+          fboxUid: that.$route.params.id
+        })
+      }).then(res => {
+        Indicator.close();
+        if(res.data.code === '0000'){
+          Toast('三秒后跳回首页');
+          setTimeout( () => {
+            this.$router.push({path: 'daohang'});
+          })
+          return;
+        };
+        Toast(res.data.data);
+      })
     }
   },
 
   created() {
-     return;
-    let that = this
-    let isplay=true
-    let isplay1 = true
-    let isplay2 = true
-    this.openId = localStorage.getItem('openid')
-    this.getdingdaninfo()
-    this.timer = setInterval(function () {
-      that.watchstate()
-    }, 5000)
-    if(this.startxi=='正在刷洗'){
-      if(isplay){
-           document.getElementById('dala').pause();
-            document.getElementById('fenggan').pause();
-            document.getElementById('shuaxi').play();
-            isplay = false;
-        }
-            
-             }else if(this.startxi=='正在打蜡'){
-               if(isplay1){
-                document.getElementById('fenggan').pause();
-                 document.getElementById('shuaxi').pause();
-               document.getElementById('dala').play();
-               isplay1 = false;
-               }
-            
-             }else if(this.startxi=='正在风干'){
-               if(isplay2){
-                 document.getElementById('shuaxi').pause();
-                document.getElementById('dala').pause();
-                document.getElementById('fenggan').play();
-                isplay2 = false;
-               }
-            
-             }
-   
+    return;
+    let that = this;
+    let isplay = true;
+    let isplay1 = true;
+    let isplay2 = true;
+    this.openId = localStorage.getItem("openid");
+    this.getdingdaninfo();
+    this.timer = setInterval(function() {
+      that.watchstate();
+    }, 5000);
+    if (this.startxi == "正在刷洗") {
+      if (isplay) {
+        document.getElementById("dala").pause();
+        document.getElementById("fenggan").pause();
+        document.getElementById("shuaxi").play();
+        isplay = false;
+      }
+    } else if (this.startxi == "正在打蜡") {
+      if (isplay1) {
+        document.getElementById("fenggan").pause();
+        document.getElementById("shuaxi").pause();
+        document.getElementById("dala").play();
+        isplay1 = false;
+      }
+    } else if (this.startxi == "正在风干") {
+      if (isplay2) {
+        document.getElementById("shuaxi").pause();
+        document.getElementById("dala").pause();
+        document.getElementById("fenggan").play();
+        isplay2 = false;
+      }
+    }    
   },
   mounted() {
-    var that =  this;
-   this.timers= setInterval(function(){
-   ++that.timeCount 
-  //  that.timeCount+=60 
-   console.log(that.timeCount)
-   that.changeProcess(that.timeCount)
-    },1000)
-    var map = new BMap.Map("map");    // 创建Map实例
-    map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);  // 初始化地图,设置中心点坐标和地图级别
+    var that = this;
+    this.timers = setInterval(function() {
+      ++that.timeCount;
+      //  that.timeCount+=60
+      console.log(that.timeCount);
+      that.changeProcess(that.timeCount);
+    }, 1000);
+    var map = new BMap.Map("map"); // 创建Map实例
+    map.centerAndZoom(new BMap.Point(116.404, 39.915), 11); // 初始化地图,设置中心点坐标和地图级别
     //添加地图类型控件
-    map.addControl(new BMap.MapTypeControl({
-      mapTypes: [
-        BMAP_NORMAL_MAP,
-        BMAP_HYBRID_MAP
-      ]    }));
-    map.setCurrentCity("北京");          // 设置地图显示的城市 此项是必须设置的
+    map.addControl(
+      new BMap.MapTypeControl({
+        mapTypes: [BMAP_NORMAL_MAP, BMAP_HYBRID_MAP]
+      })
+    );
+    map.setCurrentCity("北京"); // 设置地图显示的城市 此项是必须设置的
     map.enableScrollWheelZoom(true);
   }
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -371,45 +416,45 @@ export default {
 .bg-gray {
   background: #f8f8f8;
 }
-.yimaqingxi{
-  width:px2rem(340px);
+.yimaqingxi {
+  width: px2rem(340px);
   height: px2rem(160px);
-  margin-top:px2rem(15px);
+  margin-top: px2rem(15px);
 }
-.car{
-  width:px2rem(83px);
+.car {
+  width: px2rem(83px);
   height: px2rem(113px);
-  margin-top:px2rem(30px);
+  margin-top: px2rem(30px);
 }
-.lines{
+.lines {
   width: px2rem(165px);
   height: px2rem(2px);
   margin-top: px2rem(18px);
 }
-.startxi{
+.startxi {
   color: #d0ebff;
   font-size: px2rem(16px);
   margin-top: px2rem(11px);
 }
-.xi{
+.xi {
   color: #3f8adc;
   font-size: px2rem(13px);
-  margin-top:px2rem(2px);
+  margin-top: px2rem(2px);
 }
-.qixibg{
-  width:100%;
+.qixibg {
+  width: 100%;
   height: px2rem(280px);
   background-image: url(../../assets/images/wash-bg.png);
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;
   flex-direction: column;
-  align-items:center;
+  align-items: center;
   position: relative;
-  p{
-     font-size: px2rem(18px);
-     color: #fff;
-     line-height: px2re(20px);
+  p {
+    font-size: px2rem(18px);
+    color: #fff;
+    line-height: px2re(20px);
   }
 }
 .clear img {
@@ -605,86 +650,87 @@ export default {
   text-align: right;
 }
 
-.tops{
-  position:absolute;
-  bottom:px2rem(25px);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+.tops {
+  position: absolute;
+  bottom: px2rem(25px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* chen */
-.ad{
-   overflow: hidden;
-   clear: both;
-   img{
-      width: 100%;
+.ad {
+  overflow: hidden;
+  clear: both;
+  img {
+    width: 100%;
+    float: left;
+  }
+}
+.videos {
+  padding: 0 px2rem(15px);
+  margin-bottom: px2rem(15px);
+  overflow: hidden;
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  > p {
+    font-size: px2rem(20px);
+    position: relative;
+    height: px2rem(40px);
+    margin: 0;
+    &:before {
+      // width: px2rem(60px);
+      height: px2rem(10px);
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      background: #49ccf4;
+      content: "为您优选";
+      line-height: 0;
+    }
+  }
+  .scroll {
+    width: px2rem(360px);
+    overflow-x: scroll;
+  }
+  ul {
+    width: px2rem(540px);
+    list-style: none;
+    overflow: hidden;
+    clear: both;
+    li {
       float: left;
-   }
-}
-.videos{
-   padding: 0 px2rem(15px);
-   margin-bottom: px2rem(15px);
-   overflow: hidden;
-   *{
-      margin: 0;
-      padding: 0;
-   }
-   >p{
-      font-size: px2rem(20px);
-      position: relative;
-      height: px2rem(40px);
-      margin: 0;
-      &:before{
-         // width: px2rem(60px);
-         height: px2rem(10px);
-         position: absolute;
-         left: 0;
-         bottom:0;
-         background: #49ccf4;
-         content: '为您优选';
-         line-height:0;
-      }
-   }
-   .scroll{
-      width: px2rem(360px);
-      overflow-x: scroll;
-   }
-   ul{
-      width: px2rem(540px);
-      list-style: none;
+      width: px2rem(250px);
+      height: px2rem(210px);
+      background: #fff;
+      border-radius: px2rem(5px);
       overflow: hidden;
-      clear: both;
-      li{
-         float: left;
-         width: px2rem(250px);
-         height: px2rem(210px);
-         background: #fff;
-         border-radius: px2rem(5px);
-         overflow:hidden;
-         margin-right: px2rem(20px);
-         margin-top:px2rem(10px);
-         video{
-            width: px2rem(250px);
-            float: left;
-         }
-         h2,p{
-            padding: 0 px2rem(10px);
-         }
-         h2{
-            font-size: px2rem(14px);
-            line-height: px2rem(30px);
-            color: #000;
-         }
-         p{
-            font-size:  px2rem(12px);
-            line-height: px2re(24px);
-            color: #999;
-         }
+      margin-right: px2rem(20px);
+      margin-top: px2rem(10px);
+      video {
+        width: px2rem(250px);
+        float: left;
       }
-   }
+      h2,
+      p {
+        padding: 0 px2rem(10px);
+      }
+      h2 {
+        font-size: px2rem(14px);
+        line-height: px2rem(30px);
+        color: #000;
+      }
+      p {
+        font-size: px2rem(12px);
+        line-height: px2re(24px);
+        color: #999;
+      }
+    }
+  }
 }
-.circle{
+.circle {
   width: px2rem(160px);
   height: px2rem(160px);
   background-image: url(../../assets/images/circle.png);
@@ -693,17 +739,17 @@ export default {
   background-position: center center;
   position: relative;
 }
-.stop{
+.stop {
   width: px2rem(70px);
   height: px2rem(70px);
-  background-image: linear-gradient(#c31d27,#9a3129);
+  background-image: linear-gradient(#c31d27, #9a3129);
   border: px2rem(3px) solid #c10613;
   border-radius: 50%;
   font-size: px2rem(14px);
   position: absolute;
   left: px2rem(45px);
   top: px2rem(45px);
-  span{
+  span {
     position: absolute;
     width: px2rem(40px);
     height: px2rem(40px);
