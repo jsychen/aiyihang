@@ -2,8 +2,9 @@ var path = require('path')
 var webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const vuxLoader = require('vux-loader');
 
-module.exports = {
+const webpackConfig = {
   entry: './src/main.js',
   output: {
     path: path.resolve(__dirname, './aiyih'),
@@ -62,7 +63,7 @@ module.exports = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js'
     },
-    extensions: ['*', '.js', '.vue', '.json']
+    extensions: ['*', '.js', '.vue', '.json', '.less']
   },
   devServer: {
     historyApiFallback: true,
@@ -106,3 +107,4 @@ if (process.env.NODE_ENV === 'production') {
     })
   ])
 }
+module.exports = vuxLoader.merge(webpackConfig,{plugins:['vux-ui']});

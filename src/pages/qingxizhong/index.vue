@@ -12,7 +12,7 @@
          <span class="startxi">{{startxi}}</span>
          <span class="xi">{{startxi}},请勿操作</span> -->
 
-<div class="circle">
+        <!-- <div class="circle">
           <div class="pie-right"> 
             <div class="rights" v-bind:style="{ transform: rotateR  }"></div>
           </div>
@@ -20,10 +20,20 @@
             <div class="lefts" v-bind:style="{ transform: rotateL }"></div>
           </div>
           <div class="mask">
-            <!-- <img src="../../assets/rec.png" style="display:block;width:100%;height:100%;" v-if="isImg">
-            <img src="../../assets/rect.png" style="display:block;width:100%;height:100%;" v-else> -->
             <img src="../../assets/images/shutDown.png"/>
           </div>
+        </div> -->
+        <div class="circle">
+          <x-circle
+            :percent="percent"
+            :stroke-width="5"
+            :trail-width="1"
+            :stroke-color="['#4a6ef4', '#00d2ff']"
+            :trail-color="['#183891']">
+          </x-circle>
+          <button class="stop">
+            <span>紧急停止</span>
+          </button>
         </div>
         <div class="tops">
             <span class="startxi">{{startxi}}</span>
@@ -151,7 +161,11 @@
 </template>
 <script>
 import { Toast } from 'mint-ui';
+import { XCircle } from 'vux'
 export default {
+  components: {
+    XCircle
+  },
   data() {
     return {
       datadingdan: {},
@@ -164,7 +178,8 @@ export default {
       timeCount:0,
       rotateL:0,
       rotateR:0,
-      isImg:true
+      isImg:true,
+      percent: 0
     }
   },
   methods: {
@@ -263,20 +278,11 @@ export default {
       });
     },
     changeProcess(value) {
-      var num = value * 1.2414
-      if (num < 180) {
-        this.rotateR = 'rotate(' + num + 'deg)'
-      
-      } else {
-        this.rotateL = 'rotate(' + (num-180) + 'deg)'
-        this.rotateR = 'rotate(' + 180 + 'deg)'
-       
-      }
-    
-      if(this.timeCount>=360){
+      let time = 4*60 + 40;
+      var num = value * 5 / 14;
+      this.percent = num;
+      if(this.timeCount >= time){
          clearInterval(this.timers);
-         this.isImg = false;
-        
       }
     }
   },
@@ -599,73 +605,6 @@ export default {
   text-align: right;
 }
 
-// 环形进度条
-//css
-.circle {
-  //这个元素可以提供进度条的颜色
-  position: absolute;
-  height: px2rem(140px);
-  width: px2rem(140px);
-  border-radius: 50%;
-  background-image: linear-gradient(0deg, #4a6ff4 0%,#00d1ff 100%); //注意这是表示当前进度的颜色
-  top: px2rem(55px);
-}
-.pie-right,
-.pie-left {
-  //这俩元素主要是为了分别生成两个半圆的，所以起作用的地方在于clip裁掉另一半
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: px2rem(150px);
-  width: px2rem(150px);
-  border-radius: 50%;
-}
-.rights,
-.lefts {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: px2rem(140px);
-  width: px2rem(140px);
-  border-radius: 50%;
-  background: #183891; //注意这个才不是当前进度的颜色
-}
-// .rights {
-//   transform: rotate(30deg);
-// }
-.pie-right,
-.rights {
-  //裁掉左边一半
-  clip: rect(0, auto, auto, px2rem(70px));
-}
-.pie-left,
-.lefts {
-  //裁掉右边一半
-  clip: rect(0, px2rem(70px), auto, 0);
-}
-.mask {
-  //我是遮罩 mask不用改 好欣慰
-  height: px2rem(115px);
-  width: px2rem(115px);
-  position: absolute;
-  z-index: 10;
-  top: 50%;
-  left: 50%;
-  transform: translateY(-50%) translateX(-50%);
-  background-image: url(../../assets/images/circle.png);
-  background-color: #17174a;
-  background-size: 80% 80%;
-  background-repeat: no-repeat;
-  background-position: center center;
-  border-radius: 50%;
-  img{
-     width: 46%;
-     height:46%;
-     position: absolute;
-     left: 28%;
-     top: 28%;
-  }
-}
 .tops{
   position:absolute;
   bottom:px2rem(25px);
@@ -744,5 +683,39 @@ export default {
          }
       }
    }
+}
+.circle{
+  width: px2rem(160px);
+  height: px2rem(160px);
+  background-image: url(../../assets/images/circle.png);
+  background-size: 80% 80%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  position: relative;
+}
+.stop{
+  width: px2rem(70px);
+  height: px2rem(70px);
+  background-image: linear-gradient(#c31d27,#9a3129);
+  border: px2rem(3px) solid #c10613;
+  border-radius: 50%;
+  font-size: px2rem(14px);
+  position: absolute;
+  left: px2rem(45px);
+  top: px2rem(45px);
+  span{
+    position: absolute;
+    width: px2rem(40px);
+    height: px2rem(40px);
+    padding: px2rem(5px);
+    background: #dac8cb;
+    text-align: center;
+    color: #cb2833;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    border-radius: 50%;
+    font-weight: bold;
+  }
 }
 </style>
