@@ -26,11 +26,11 @@
          <div class="nine-graid">
             <div class="item" @click="myDingdan">
                <div class="img-wrap">
-                  <img src="../../assets/dingdanmenu.png" alt>
+                  <img src="../../assets/images/icon-order.png" alt>
                </div>
                <div class="desc">洗车订单</div>
             </div>
-            <div class="item" @click="myChe">
+            <!-- <div class="item" @click="myChe">
                <div class="img-wrap">
                   <img src="../../assets/chemenu.png" alt>
                </div>
@@ -41,10 +41,10 @@
                   <img src="../../assets/yuemenu.png" alt>
                </div>
                <div class="desc">我的余额</div>
-            </div>
+            </div> -->
             <router-link class="item" :to="{path: '/yijian'}">
                <div class="img-wrap">
-                  <img src="../../assets/dingdanmenu.png" alt>
+                  <img src="../../assets/images/icon-opinion.png" alt>
                </div>
                <div class="desc">意见反馈</div>
             </router-link>
@@ -209,18 +209,37 @@ export default {
   border-radius: 50%;
 }
 .nine-graid {
-  width: 100%;
+  width: px2rem(200px);
   overflow: hidden;
   clear: both;
   position: fixed;
   bottom: px2rem(60px);
   left: 0;
+  left: 50%;
+  margin-left: px2rem(-100px);
+  &::before{
+     position: absolute;
+     width: 1px;
+     height: px2rem(60px);
+     background: #e5e5e5;
+     content: '';
+     left: 50%;
+     top: 0;
+  }
   .item{
      float: left;
-     width: px2rem(72px);
+     width: px2rem(60px);
      font-size: px2rem(14px);
      text-align: center;
-     margin: 0 px2rem(10px);
+     &:nth-child(1){
+        float: left;
+     }
+     &:nth-child(2){
+        float: right;
+     }
+     img{
+        width: px2rem(24px);
+     }
   }
   a{
      text-decoration: none;
@@ -230,9 +249,6 @@ export default {
 .img-wrap {
   width: px2rem(27px);
   height: px2rem(27px);
-}
-.img-wrap img {
-  width: 100%;
 }
 .item div {
   margin: 0 auto;

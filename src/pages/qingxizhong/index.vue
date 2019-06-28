@@ -161,7 +161,7 @@
   </div>
 </template>
 <script>
-import { Toast } from "mint-ui";
+import { Toast, Indicator } from "mint-ui";
 import { XCircle } from "vux";
 import { setTimeout } from 'timers';
 export default {
@@ -328,9 +328,7 @@ export default {
       this.showModal = false;
    }
   },
-
   created() {
-    return;
     let that = this;
     let isplay = true;
     let isplay1 = true;
