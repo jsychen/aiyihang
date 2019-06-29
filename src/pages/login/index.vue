@@ -251,7 +251,7 @@ export default {
       }
       input{
          border: 0;
-         line-height: px2rem(30px);
+         line-height: px2rem(24px);
          background: transparent;
          margin-left: px2rem(10px);
          color: #fff;
@@ -261,14 +261,14 @@ export default {
             color: #fff;
          }
          &[type="text"]{
-            width: px2rem(260px);
+            width: px2rem(240px);
          }
          &[type="number"]{
-            width: px2rem(160px);
+            width: px2rem(140px);
          }
       }
       button{
-         width: px2rem(90px);
+         width: px2rem(100px);
          height: px2rem(30px);
          background-image: url(../../assets/images/btnBg.svg);
          background-size: 100% 100%;

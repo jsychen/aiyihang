@@ -12,7 +12,7 @@
             :stroke-width="5"
             :trail-width="1"
             :stroke-color="['#4a6ef4', '#00d2ff']"
-            :trail-color="['#183891']"
+            trail-color="#183891"
           ></x-circle>
           <button class="stop">
             <span @click="showModal = true">紧急停止</span>
@@ -32,8 +32,9 @@
           <ul>
             <li>
               <video
+               controls
                 src="http://wx.aiyihang.com/pic/video/moyu.mp4"
-                poster="../../assets/cover.png"
+                poster="http://wx.aiyihang.com/pic/ad/2.jpg"
                 x5-playsinline
                 playsinline
                 webkit-playsinline
@@ -43,8 +44,9 @@
             </li>
             <li>
               <video
+                  controls
                 src="http://wx.aiyihang.com/pic/video/62c0da4c3406349a702dc7d7128875c0.mp4"
-                poster="../../assets/cover.png"
+                poster="http://wx.aiyihang.com/pic/ad/3.jpg"
                 x5-playsinline
                 playsinline
                 webkit-playsinline
@@ -54,6 +56,7 @@
             </li>
             <li>
               <video
+               controls
                 src="http://wx1.aiyihang.com/yetiboli.mp4"
                 poster="../../assets/cover.png"
                 x5-playsinline
@@ -163,7 +166,7 @@
 <script>
 import { Toast, Indicator } from "mint-ui";
 import { XCircle } from "vux";
-import { setTimeout } from 'timers';
+import { setTimeout, clearInterval } from 'timers';
 export default {
   components: {
     XCircle
@@ -286,12 +289,12 @@ export default {
     handleShutDown: function () {
       Indicator.open();
       this.$ajax({
-        method: "post",
-        url: "box/emerygencyStop",
-        data: this.$qs.stringify({
-          openId: that.openId,
-          fboxUid: that.$route.params.id
-        })
+        method: "get",
+        url: "box/emergencyStop",
+        params: {
+          openId: this.openId,
+          fboxUid: this.$route.params.id
+        }
       }).then(res => {
          this.showModal = false;
         if(res.data.code === '0000'){
@@ -308,15 +311,15 @@ export default {
         method: "post",
         url: "box/reset",
         data: this.$qs.stringify({
-          openId: that.openId,
-          fboxUid: that.$route.params.id
+          openId: this.openId,
+          fboxUid: this.$route.params.id
         })
       }).then(res => {
         Indicator.close();
         if(res.data.code === '0000'){
-          Toast('三秒后跳回首页');
+          Toast('三秒后跳到用户中心');
           setTimeout( () => {
-            this.$router.push({path: 'daohang'});
+            this.$router.push({path: 'myindex'});
           })
           return;
         };
@@ -445,6 +448,7 @@ export default {
   p {
     font-size: px2rem(18px);
     color: #fff;
+    height: px2rem(20px);
     line-height: px2re(20px);
   }
 }
@@ -636,11 +640,10 @@ export default {
 }
 
 .tops {
-  position: absolute;
-  bottom: px2rem(25px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  span{
+     display: block;
+     text-align: center;
+  }
 }
 
 /* chen */

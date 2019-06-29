@@ -26,12 +26,13 @@ export default {
          ],
          cardNo: '',
          password: "",
-         openId: ''
+         openId: '',
+         query: {}
       };
    },
    mounted: function () {
       this.openId = localStorage.getItem('openid');
-      this.params = this.$route.params;
+      this.query = this.$route.query;
       this.cardNo = localStorage.getItem('vipPhone') || '';
       this.getCardList();
    },
@@ -68,7 +69,7 @@ export default {
             data.erpCard = phone;
          }
          localStorage.setItem('vipPhone', data.erpPhone ? data.erpPhone : data.erpCard);
-         let params = this.params;
+         let query = this.query;
          this.$ajax.get('erpcard/bind/info', {
             params: data
          }).then( res =>{
@@ -76,7 +77,7 @@ export default {
             if (res.data.code === '0000') {
                this.$router.push({
                   name: "vipOrderDetail",
-                  params: { id: params.id, erpCard: data.data.erpCard, washType: params.washType }
+                  query: { id: query.id, erpCard: data.data.erpCard, washType: query.washType }
                });
                return;
             }

@@ -6,7 +6,7 @@
         <p>洗车服务</p>
      </div>
     <template v-if="info.surplusTimes>0">
-      <button @click="handlePay">确认支付</button>
+      <button :class="{'active': active}" @click="handlePay" @touchstart="touchStart" @touchend="touchEnd">确认支付</button>
     </template>
     <template v-else>
       <router-link tag="button" :to="{'name': 'saomastart', 'params': {id: params.id}}">选择其它支付方式</router-link>
@@ -19,13 +19,14 @@ export default {
    data: function() {
       return {
          orderId: 0,
-         params: {},
-         info: {}
+         query: {},
+         info: {},
+         active: false
       };
    },
    mounted: function() {
-      this.params = this.$route.params;
-      this.params.id = parseInt(this.params.id);
+      this.query = this.$route.query;
+      this.query.id = parseInt(this.query.id);
       this.openId = localStorage.getItem('openid');
       this.getDetail();
    },
@@ -35,8 +36,8 @@ export default {
          this.$ajax.get('erpcard/laborset/account',{
             params:{
                openId: this.openId,
-               erpCard: this.params.erpCard,
-               boxId: this.params.id
+               erpCard: this.query.erpCard,
+               boxId: this.query.id
             }
          }).then( res => {
             let data = res.data;
@@ -56,9 +57,9 @@ export default {
             subAccountId: info.id, 
             laborsetId: info.laborsetId,  
             laborId: info.laborId,
-            erpCard: this.params.erpCard,
+            erpCard: this.query.erpCard,
             plateNo: info.carList,
-            boxId: this.params.id
+            boxId: this.query.id
          };
          Indicator.open('正在连接洗车机...');
          this.$ajax.post('erpcard/submitFastSettleBill', data).then( res => {
@@ -76,8 +77,8 @@ export default {
          let data = {
             openId: this.openId,
             payType: 8,
-            washType: this.params.washType,
-            boxUid: this.params.id
+            washType: this.query.washType,
+            boxUid: this.query.id
          };
          this.$ajax.get('washRecord/submitWashRecord', {params: data}).then( res => {
             Indicator.close();
@@ -94,18 +95,26 @@ export default {
          Indicator.open('洗车机启动中...');
          this.$ajax.get('box/start', {
             params: {
-               fboxUid: this.params.id,
-               washType: this.params.washType,
+               fboxUid: this.query.id,
+               washType: this.query.washType,
                openId: this.openId
             }
          }).then( res => {
             Indicator.close();
             if(res.data.code === '0000'){
-               this.$router.push({name: 'qingxizhong', params: {id: this.params.id}});
+               this.$router.push({name: 'qingxizhong', params: {id: this.query.id}});
                return;
             }
             Toast(res.data.msg);
          })
+      },
+      // 按钮按下
+      touchStart: function () {
+         this.active = true;
+      },
+      // 按钮松开
+      touchEnd: function () {
+         this.active = false;
       }
    }
 };
@@ -158,6 +167,10 @@ export default {
     display: block;
     margin: px2rem(60px) auto 0;
     letter-spacing: 2px;
+    &:active{
+      background: #d81618;
+      color: #fff;
+   }
   }
 }
 </style>

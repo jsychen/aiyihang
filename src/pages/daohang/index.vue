@@ -262,7 +262,6 @@ export default {
         that.onoff = true
         that.address = e.address
         that.boxid = e.boxUid
-
       }
 
     },

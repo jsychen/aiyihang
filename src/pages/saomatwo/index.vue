@@ -79,7 +79,7 @@ export default {
   data() {
     return {
       url: '../../dist/select.png',
-      agree: false
+      agree: true
     }
   },
   methods: {

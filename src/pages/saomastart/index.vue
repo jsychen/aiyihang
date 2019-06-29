@@ -68,7 +68,7 @@
       </div>
       <div v-if="false" class="title">请选择会员卡</div>
       <img v-if="false" class="youhui-img" src="../../assets/5yuanyong.png" alt>
-      <router-link class="handleNext" tag="button" :to="{name: 'vipLogin', params:{ id: this.$route.params.id , washType: this.washType}}" v-if="type === 'huiyuan'">下一步</router-link>
+      <router-link class="handleNext" tag="button" :to="{name: 'vipLogin', query:{ id: this.$route.params.id , washType: this.washType}}" v-if="type === 'huiyuan'">下一步</router-link>
       <!-- <div v-if="showbtn" class="bottom-btn" @click="next">马上启动</div> -->
       <button v-if="type === 'weixin'" class="handleNext" @click="next">马上启动</button>
       <div class="zhifuid" v-if="showhuiyuan">
@@ -231,7 +231,7 @@ export default {
         function (res) {
           Indicator.close();
           if (res.err_msg == "get_brand_wcpay_request:ok") {
-             this.handleOrder(orderId);
+             that.handleOrder(orderId);
             that.$router.push({ name: 'qingxizhong', params: {
                 id: that.$route.params.id
             }});
@@ -253,7 +253,8 @@ export default {
       this.$ajax({
         method: 'post',
         url: 'erpcard/invoice',
-        data: this.$qs.stringify(data)
+        data: this.$qs.stringify(data),
+        contentType: 'application/x-www-form-urlencoded',
       }).then((res) => {
          if(res.data.code === '0000') {
             console.log('微信支付成功推送结算订单到erp');
@@ -501,7 +502,8 @@ export default {
       this.$ajax({
         method: 'post',
         url: 'erpcard/iss',
-        data: this.$qs.stringify({ checkCode: this.checkCode, openId: this.openId})
+        data: this.$qs.stringify({ checkCode: this.checkCode, openId: this.openId}),
+        contentType: 'application/x-www-form-urlencoded',
       }).then((res) => {
         Indicator.close();
          if(res.data.code === '0000'){
@@ -533,8 +535,25 @@ export default {
          Toast(res.data.msg);
       })
    },
+   //   获取微信的openId
+   getOpenId: function (callback) {
+      let reg = new RegExp("(^|&)" + 'code' + "=([^&]*)(&|$)");
+      let r = window.location.search.substr(1).match(reg);
+      this.$ajax({
+        method: 'post',
+        url: 'wx/getOpenId',
+        data: this.$qs.stringify({ code: r[2] })
+      }).then((res) => {
+         if(res.data.code === '0000') {
+            this.wxopenid = res.data.data;
+            return;
+         }
+         Toast('微信登录失败');
+      }).catch(err => {
+         Toast(err);
+      });
+   },
   },
-
   created() {
     this.openId = localStorage.getItem("openid"); //sessionId
     this.wxopenid = localStorage.getItem('wxopenid');//openid
@@ -544,8 +563,12 @@ export default {
     this.getchequan()
   },
   mounted() {
+     
     this.$nextTick(function () {
-      this.getConfig()
+      this.getConfig();
+      if(!this.wxopenid){
+         this.getOpenId();
+      }
     })
     var ua = navigator.userAgent.toLowerCase();
     if (ua.match(/MicroMessenger/i) == "micromessenger") {
