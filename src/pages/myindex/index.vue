@@ -93,6 +93,7 @@ export default {
   methods: {
     getpermit() {
       var ua = navigator.userAgent.toLowerCase();
+      
       if (ua.match(/MicroMessenger/i) == "micromessenger") {
         this.isWeixin = true;
         // 在微信内获取code
@@ -108,7 +109,8 @@ export default {
           "&redirect_uri=" +
           pageUrl + //这里放当前页面的地址
           "&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect";
-        //
+        console.log(url);
+        return;
         window.location.href = url;
       } else {
         // 微信外

@@ -284,6 +284,7 @@ html, body{
   width: 100%;
 }
 .phone {
+   width: 100%;
   font-size: px2rem(14px);
   text-align: center;
   line-height: px2rem(30px);
@@ -292,6 +293,7 @@ html, body{
   left: 50%;
   transform: translateX(-50%);
   bottom: px2rem(90px);
+  white-space: nowrap;
   span{
      padding-left: px2rem(20px);
      background-image: url(../../assets/images/icon-phone.svg);

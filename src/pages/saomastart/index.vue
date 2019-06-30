@@ -59,7 +59,7 @@
             </div>
          </label>
          <label>
-            <span class="icon-code">8000m码核销</span>
+            <span class="icon-code">8000码核销</span>
             <div class="radio">
                <input type="radio" value="checkCode" v-model="type"/>
                <em></em>
@@ -566,9 +566,9 @@ export default {
      
     this.$nextTick(function () {
       this.getConfig();
-      if(!this.wxopenid){
-         this.getOpenId();
-      }
+      // if(!this.wxopenid){
+      //    this.getOpenId();
+      // }
     })
     var ua = navigator.userAgent.toLowerCase();
     if (ua.match(/MicroMessenger/i) == "micromessenger") {
