@@ -14,14 +14,15 @@
                </div>
             </div>
          </div>
-         <div class="photo" v-show="!onoff" @click="getpermit">
+         <!-- <div class="photo" v-show="!onoff" @click="getpermit"> -->
+          <div class="photo" v-show="!onoff">
             <div class="img-wraps">
                <img class="photo-show" src="../../assets/anvator.jpg" alt>
             </div>
             <div class="name">
-               <div class="login">登录</div>
+               <!-- <button class="login">去登录</button> -->
+               <router-link tag="button" :to="{name: 'login'}">去登录</router-link>
             </div>
-            <img class="photo-go" src="../../assets/Group4.png" alt>
          </div>
          <div class="nine-graid">
             <div class="item" @click="myDingdan">
@@ -93,7 +94,6 @@ export default {
   methods: {
     getpermit() {
       var ua = navigator.userAgent.toLowerCase();
-      
       if (ua.match(/MicroMessenger/i) == "micromessenger") {
         this.isWeixin = true;
         // 在微信内获取code
@@ -109,8 +109,6 @@ export default {
           "&redirect_uri=" +
           pageUrl + //这里放当前页面的地址
           "&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect";
-        console.log(url);
-        return;
         window.location.href = url;
       } else {
         // 微信外
@@ -146,7 +144,9 @@ export default {
     },
     showInfo() {
       this.$router.push({ name: "selfinfo" });
-    }
+    },
+    // 判断用户是否登录
+    checkUserLogin: function () {}
   },
   created() {
     this.loginurls = this.loginurl;
@@ -162,8 +162,20 @@ export default {
 
 <style scoped lang="scss">
 @import "../../assets/common.scss";
+.name{
+  width: px2rem(260px);
+  overflow: hidden;
+  clear: both;
+}
 .login {
-  font-size: px2rem(15px);
+  width: px2rem(100px);
+  height: px2rem(30px);
+  background: #d63030;
+  border-radius: 5px;
+  border: 0;
+  float: left;
+  font-size: px2rem(14px);
+  color: #fff;
 }
 *{
    margin: 0;

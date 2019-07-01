@@ -66,12 +66,12 @@ export default {
         })
       }).then(res => {
           Toast(res.data.msg);
-          that.$router.push({
-            name: "qingxiwanbi",
-            params: {
-              id: that.$route.params.id
-            }
-          });
+          // that.$router.push({
+          //   name: "qingxiwanbi",
+          //   params: {
+          //     id: that.$route.params.id
+          //   }
+          // });
         }).catch(err => {});
     },
     next() {

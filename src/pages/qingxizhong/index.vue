@@ -732,6 +732,7 @@ export default {
 .stop {
   width: px2rem(70px);
   height: px2rem(70px);
+  line-height: px2rem(35px);
   background-image: linear-gradient(#c31d27, #9a3129);
   border: px2rem(3px) solid #c10613;
   border-radius: 50%;
