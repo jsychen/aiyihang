@@ -15,7 +15,7 @@
             trail-color="#183891"
           ></x-circle>
           <button class="stop">
-            <span @click="showModal = true">紧急停止</span>
+            <span @click="beforeStop">紧急停止</span>
           </button>
         </div>
         <div class="tops">
@@ -217,7 +217,6 @@ export default {
           switch (res.data.data) {
             case "洗车已完成":
               that.startxi = res.data.data;
-              clearInterval(that.timer);
               that.$router.push({
                 name: "fuwupingjia",
                 params: { id: that.orderid }
@@ -286,6 +285,15 @@ export default {
       }
     },
     // 紧急停止
+   beforeStop: function () {
+      let videos = document.getElementsByTagName('video');
+      for(let i=0;i<videos.length;i++){
+         if (!videos[i].paused){
+           videos[i].pause();
+         }
+      }
+      this.showModal = true;
+   },
     handleShutDown: function () {
       Indicator.open();
       this.$ajax({
@@ -319,8 +327,8 @@ export default {
         if(res.data.code === '0000'){
           Toast('三秒后跳到用户中心');
           setTimeout( () => {
-            this.$router.push({path: 'myindex'});
-          })
+            this.$router.push({ path: 'myindex' });
+          }, 3000);
           return;
         };
         Toast(res.data.data);
@@ -368,8 +376,6 @@ export default {
     var that = this;
     this.timers = setInterval(function() {
       ++that.timeCount;
-      //  that.timeCount+=60
-      console.log(that.timeCount);
       that.changeProcess(that.timeCount);
     }, 1000);
     var map = new BMap.Map("map"); // 创建Map实例
@@ -743,6 +749,7 @@ export default {
     position: absolute;
     width: px2rem(40px);
     height: px2rem(40px);
+    line-height: px2rem(20px);
     padding: px2rem(5px);
     background: #dac8cb;
     text-align: center;

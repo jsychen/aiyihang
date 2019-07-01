@@ -33,6 +33,35 @@ export default {
     }
   },
   methods: {
+     //  判断用户是否登录
+    checkUser: function () {
+      if (this.openId != null) {
+        this.$ajax({
+          method: 'post',
+          url: "member/isLogin",
+          data: this.$qs.stringify({ openId: this.openId })
+        }).then(res => {
+          if (res.data.code == '0000') {
+            if (res.data.data == false) {
+              Toast('未登录,3秒后跳转')
+              setTimeout(() => {
+                this.$router.replace({ name: 'login', query: { id: this.$route.params.id} });
+              }, 3000)
+            }
+          } else {
+            Toast(res.data.msg)
+            setTimeout(() => {
+              this.$router.replace({ name: 'login', query: { id: this.$route.params.id} });
+            }, 3000)
+          }
+        }).catch(err => {
+          setTimeout(() => {
+            this.$router.replace({ name: 'login', query: { id: this.$route.params.id}});
+            
+          }, 3000)
+        })
+      }
+    },
     next() {
       let that = this
       // if (this.openId == null) {
@@ -62,7 +91,6 @@ export default {
       this.$ajax.get('box/canWash', {
         params: { openId: that.openId, fboxUid: that.$route.params.id }
       }).then((res) => {
-        
         if (res.data.code == '0000') {
           if (res.data.data == 'idle') {
             Toast('空闲中')
@@ -80,15 +108,15 @@ export default {
           
         } else {
           that.idle = true;
-          
           Toast(JSON.stringify(res.data.msg))
           if (!that.openId) {
             Toast('未登录,3秒后跳转');
-            setTimeout(function () {
+            setTimeout( () => {
               that.$router.replace({
-                name: 'myindex'
+                name: 'login',
+                query: { id: this.$route.params.id}
               })
-            }, 3000)
+            }, 3000);
             return;
           }
         }
@@ -104,6 +132,7 @@ export default {
     //     console.log(resultStr.split('#')[1].split('/')[2])
   },
   mounted() {
+     this.checkUser();
     // document.addEventListener("WeixinJSBridgeReady", function () {
     //   document.getElementById('music').play();
     // }, false);

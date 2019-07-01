@@ -2,10 +2,10 @@
   <div class="container">
      <div class="card">
         <p>卡内剩余</p>
-        <b>{{info.surplusTimes || 0}} 次</b>
+        <b>{{totalTimes || 0}} 次</b>
         <p>洗车服务</p>
      </div>
-    <template v-if="info.surplusTimes>0">
+    <template v-if="totalTimes>0">
       <button :class="{'active': active}" @click="handlePay" @touchstart="touchStart" @touchend="touchEnd">确认支付</button>
     </template>
     <template v-else>
@@ -21,7 +21,8 @@ export default {
          orderId: 0,
          query: {},
          info: {},
-         active: false
+         active: false,
+         totalTimes: 0
       };
    },
    mounted: function() {
@@ -42,9 +43,14 @@ export default {
          }).then( res => {
             let data = res.data;
             if (res.data.code === '0000') {
+               let totalTimes = data.data.totalTimes;
                this.info = data.data.laborsetAccount;
+               this.totalTimes = totalTimes;
                return;
-            }
+            };
+            if(!res.data.data) {
+               this.$router.push({'name': 'saomastart', 'params': {id: this.params.id}})
+            };
             Toast(res.data.msg);
          });
       },

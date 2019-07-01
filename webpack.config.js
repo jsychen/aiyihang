@@ -11,7 +11,7 @@ const webpackConfig = {
    //  生产环境
     publicPath: './',  
    //  publicPath: '/dist/',
-    filename: 'build.js?[hash]'
+    filename: 'build.js?[hash:8]'
   },
   module: {
     rules: [

@@ -535,24 +535,6 @@ export default {
          Toast(res.data.msg);
       })
    },
-   //   获取微信的openId
-   getOpenId: function (callback) {
-      let reg = new RegExp("(^|&)" + 'code' + "=([^&]*)(&|$)");
-      let r = window.location.search.substr(1).match(reg);
-      this.$ajax({
-        method: 'post',
-        url: 'wx/getOpenId',
-        data: this.$qs.stringify({ code: r[2] })
-      }).then((res) => {
-         if(res.data.code === '0000') {
-            this.wxopenid = res.data.data;
-            return;
-         }
-         Toast('微信登录失败');
-      }).catch(err => {
-         Toast(err);
-      });
-   },
   },
   created() {
     this.openId = localStorage.getItem("openid"); //sessionId
@@ -563,12 +545,8 @@ export default {
     this.getchequan()
   },
   mounted() {
-     
     this.$nextTick(function () {
       this.getConfig();
-      // if(!this.wxopenid){
-      //    this.getOpenId();
-      // }
     })
     var ua = navigator.userAgent.toLowerCase();
     if (ua.match(/MicroMessenger/i) == "micromessenger") {
