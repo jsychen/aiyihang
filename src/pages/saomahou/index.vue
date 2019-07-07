@@ -24,6 +24,7 @@
 </template>
 <script>
 import { Toast } from 'mint-ui';
+import { setTimeout } from 'timers';
 export default {
   data() {
     return {
@@ -35,6 +36,14 @@ export default {
   methods: {
      //  判断用户是否登录
     checkUser: function () {
+      let wxopenid = localStorage.getItem('wxopenid');
+      if(!wxopenid || wxopenid === 'undefined'){
+         Toast('未登录,3秒后跳转');
+         setTimeout( () => {
+            this.$router.replace({ name: 'login', query: { id: this.$route.params.id} });
+         }, 3000);
+         return;
+      };
       if (this.openId != null) {
         this.$ajax({
           method: 'post',
@@ -43,36 +52,37 @@ export default {
         }).then(res => {
           if (res.data.code == '0000') {
             if (res.data.data == false) {
-              Toast('未登录,3秒后跳转')
+              Toast('未登录,3秒后跳转');
               setTimeout(() => {
-                this.$router.replace({ name: 'login', query: { id: this.$route.params.id} });
-              }, 3000)
+                this.$router.push({ name: 'login', query: { id: this.$route.params.id} });
+              }, 3000);
+            } else {
+               this.usestate();
             }
           } else {
             Toast(res.data.msg)
             setTimeout(() => {
-              this.$router.replace({ name: 'login', query: { id: this.$route.params.id} });
-            }, 3000)
+              this.$router.push({ name: 'login', query: { id: this.$route.params.id} });
+            }, 3000);
           }
         }).catch(err => {
           setTimeout(() => {
-            this.$router.replace({ name: 'login', query: { id: this.$route.params.id}});
-            
-          }, 3000)
-        })
-      }
+            this.$router.push({ name: 'login', query: { id: this.$route.params.id}});
+          }, 3000);
+        });
+      } 
     },
     next() {
       let that = this
-      // if (this.openId == null) {
-      //   Toast('未登录,3秒后跳转');
-      //   setTimeout(function () {
-      //     that.$router.replace({
-      //       name: 'myindex'
-      //     })
-      //   }, 3000)
-      //   return;
-      // }
+      if (this.openId == null) {
+        Toast('未登录,3秒后跳转');
+        setTimeout(function () {
+          that.$router.replace({
+            name: 'myindex'
+          })
+        }, 3000)
+        return;
+      }
 
       if (that.idle) {
        
@@ -87,7 +97,8 @@ export default {
       })
     },
     usestate() {
-      let that = this
+      let that = this;
+      console.log('fboxUid:' + this.$route.params.id);
       this.$ajax.get('box/canWash', {
         params: { openId: that.openId, fboxUid: that.$route.params.id }
       }).then((res) => {
@@ -136,32 +147,34 @@ export default {
     // document.addEventListener("WeixinJSBridgeReady", function () {
     //   document.getElementById('music').play();
     // }, false);
-    this.usestate();
-    if (this.openId != null) {
-      this.$ajax({
-        method: 'post',
-        url: "member/isLogin",
-        data: this.$qs.stringify({ openId: this.openId })
-      }).then(res => {
-        if (res.data.code == '0000') {
-          if (res.data.data == false) {
-            Toast('未登录,3秒后跳转')
-            setTimeout(() => {
-              this.$router.replace({ name: 'myindex' })
-            }, 3000)
-          }
-        } else {
-          Toast(res.data.msg)
-          setTimeout(() => {
-            this.$router.replace({ name: 'myindex' })
-          }, 3000)
-        }
-      }).catch(err => {
-        setTimeout(() => {
-          this.$router.replace({ name: 'myindex' })
-        }, 3000)
-      })
-    }
+   //  this.usestate();
+   //  if (this.openId != null) {
+   //    this.$ajax({
+   //      method: 'post',
+   //      url: "member/isLogin",
+   //      data: this.$qs.stringify({ openId: this.openId })
+   //    }).then(res => {
+   //      if (res.data.code == '0000') {
+   //        if (res.data.data == false) {
+   //          Toast('未登录,3秒后跳转11111');
+   //          console.log(this.$route);
+   //          return;
+   //          setTimeout(() => {
+   //            this.$router.push({ name: 'login', query: {id: this.$route.params.id} });
+   //          }, 3000)
+   //        }
+   //      } else {
+   //        Toast(res.data.msg)
+   //        setTimeout(() => {
+   //          this.$router.push({ name: 'login', query: {id: this.$route.params.id} });
+   //        }, 3000)
+   //      }
+   //    }).catch(err => {
+   //      setTimeout(() => {
+   //        this.$router.replace({ name: 'login', query: {id: this.$route.params.id} });
+   //      }, 3000)
+   //    })
+   //  }
   }
 }
 </script>

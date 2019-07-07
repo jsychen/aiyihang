@@ -49,7 +49,6 @@
                <input type="radio" value="weixin" v-model="type"/>
                <em></em>
             </div>
-            
          </label>
          <label>
             <span class="icon-vip">会员卡</span>

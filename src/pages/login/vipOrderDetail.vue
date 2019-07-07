@@ -2,19 +2,20 @@
   <div class="container">
      <div class="card">
         <p>卡内剩余</p>
-        <b>{{totalTimes || 0}} 次</b>
+        <b>{{totalTimes}} 次</b>
         <p>洗车服务</p>
      </div>
     <template v-if="totalTimes>0">
       <button :class="{'active': active}" @click="handlePay" @touchstart="touchStart" @touchend="touchEnd">确认支付</button>
     </template>
     <template v-else>
-      <router-link tag="button" :to="{'name': 'saomastart', 'params': {id: params.id}}">选择其它支付方式</router-link>
+      <router-link tag="button" :to="{'name': 'saomastart', 'params': {id: query.id}}">选择其它支付方式</router-link>
     </template>
   </div>
 </template>
 <script>
 import { Toast, MessageBox, Indicator } from 'mint-ui';
+import { setTimeout } from 'timers';
 export default {
    data: function() {
       return {
@@ -45,11 +46,15 @@ export default {
             if (res.data.code === '0000') {
                let totalTimes = data.data.totalTimes;
                this.info = data.data.laborsetAccount;
-               this.totalTimes = totalTimes;
+               this.totalTimes = totalTimes || 0;
                return;
             };
             if(!res.data.data) {
-               this.$router.push({'name': 'saomastart', 'params': {id: this.params.id}})
+               Toast('无洗车次数, 3秒后跳回支付选择页面');
+               setTimeout(()=> {
+                  this.$router.push({'name': 'saomastart', 'params': {id: this.query.id}});
+               }, 3000);
+               return;
             };
             Toast(res.data.msg);
          });

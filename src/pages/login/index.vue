@@ -6,7 +6,7 @@
       <div class="form">
          <div class="item">
             <span class="icon-user"></span>
-            <input type="text" placeholder="请输入手机号码" v-model="phone" />
+            <input type="number" placeholder="请输入手机号码" v-model="phone" />
          </div>
          <div class="item">
             <span class="icon-psw"></span>
@@ -79,7 +79,6 @@ export default {
           }
         })
         .catch(err => {});
-      //this.$router.push({ name: 'myindex'}) // -> /user
     },
     refreshToken(phone, refreshToken, sessionId) {
       this.$ajax
@@ -94,7 +93,9 @@ export default {
           let data = res.data;
           localStorage.setItem("openid", data.data.openId);
           localStorage.setItem("user", JSON.stringify(data.data));
-          this.$router.push({ path: "/saomahou/" + this.$route.query.id }); // -> /user
+          console.log('id:' + this.$route.query.id)
+         //  this.$router.push({ path: "/saomahou/" + this.$route.query.id }); 
+         this.$router.push({name: 'saomahou', params: {id: this.$route.query.id}})
         })
         .catch(err => {});
     },
@@ -168,11 +169,6 @@ export default {
     },
     // 获取微信的openid
     getopenid() {
-      let wxopenid = localStorage.getItem('wxopenid');
-      if(wxopenid !== 'undefined'){
-        return;
-      };
-      this.getpermit();
       let that = this;
       Indicator.open({
         text: "登录初始化...",
@@ -194,7 +190,6 @@ export default {
     },
     // 获取用于获取微信openId的code
     getpermit() {
-      console.log(1111)
       var ua = navigator.userAgent.toLowerCase();
       if (ua.match(/MicroMessenger/i) == "micromessenger") {
         this.isWeixin = true;
@@ -205,6 +200,7 @@ export default {
           .replace(/[#]/g, "%23")
           .replace(/[&]/g, "%26")
           .replace(/[=]/g, "%3d");
+          pageUrl +=  '?id=' + this.$route.query.id;
         var url =
           "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" +
           this.appid +
@@ -222,21 +218,30 @@ export default {
     },
   },
   created() {
-    this.getsessionId();
-    this.getopenid();
-    // var ua = navigator.userAgent.toLowerCase();
-    // if (ua.match(/MicroMessenger/i) == "micromessenger") {
-    //   this.isWeixin = true;
-    //   var reg = new RegExp("(^|&)" + "code" + "=([^&]*)(&|$)");
-    //   var r = window.location.search.substr(1).match(reg);
-    //   this.yanzhengcode = r[2];
-    //   this.getopenid();
-    // } else {
-    //   // 微信外
-    //   this.isWeixin = false;
-    // }
   },
-  mounted() {}
+  mounted() {
+   this.getsessionId();
+   let wxopenid = localStorage.getItem('wxopenid');
+   if(wxopenid && wxopenid !== 'undefined'){
+      return;
+   };
+   var ua = navigator.userAgent.toLowerCase();
+   if (ua.match(/MicroMessenger/i) == "micromessenger") {
+      this.isWeixin = true;
+      var reg = new RegExp("(^|&)" + 'code' + "=([^&]*)(&|$)");
+      var r = window.location.search.substr(1).match(reg);
+      this.yanzhengcode = (r && r[2]) || null;
+      if(this.yanzhengcode) {
+         this.getopenid();
+      } else {
+         this.getpermit();
+      };
+      
+   } else {
+      // 微信外
+      this.isWeixin = false;
+   }
+  }
 };
 </script>
 
