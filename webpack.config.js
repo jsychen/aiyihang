@@ -10,8 +10,8 @@ const webpackConfig = {
     path: path.resolve(__dirname, './aiyih'),
    //  生产环境
     publicPath: './',  
-   //  publicPath: '/dist/',
-    filename: 'build.js?[hash:18]'
+    // publicPath: '/dist/',
+    filename: 'build.js?[hash:20]'
   },
   module: {
     rules: [
