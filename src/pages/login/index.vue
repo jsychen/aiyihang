@@ -182,12 +182,26 @@ export default {
         .then(res => {
           // that.openId = res.data.data
           localStorage.setItem("wxopenid", res.data.data);
+          that.bindWxOpenid(res.data.data);
           Indicator.close();
         })
         .catch(err => {
           Indicator.close();
         });
     },
+   //  绑定微信openid
+   bindWxOpenid: function (wxOpenId) {
+      this.$ajax({
+        method: "post",
+        url: "member/wx/set",
+        data: this.$qs.stringify({ openId: this.sessionId, opendId2: wxOpenId })
+      })
+        .then(res => {
+           console.log('绑定成功');
+        })
+        .catch(err => {
+        });
+   },
     // 获取用于获取微信openId的code
     getpermit() {
       var ua = navigator.userAgent.toLowerCase();
