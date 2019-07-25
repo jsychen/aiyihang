@@ -17,13 +17,16 @@ import axios from 'axios';
 // Vue.prototype.appid='wx50621d59914730a8'
 // Vue.prototype.erweima='http://47.107.97.208:8010/'
 
-axios.defaults.baseURL = 'http://221.122.47.116:8010/';
+// axios.defaults.baseURL = 'http://221.122.47.116:8010/';
+
+axios.defaults.baseURL = 'http://111.198.157.165:8010/';
 Vue.prototype.saomaurl='http://wx1.aiyihang.com/#/saomahou/'
 Vue.prototype.loginurl='http://wx1.aiyihang.com/#/login'
 Vue.prototype.daohangurl='http://wx1.aiyihang.com/#/daohang'
 Vue.prototype.myindex='http://wx1.aiyihang.com/#/myindex'
 Vue.prototype.appid='wx50621d59914730a8'
-Vue.prototype.erweima='http://221.122.47.116:8010/'
+// Vue.prototype.erweima='http://221.122.47.116:8010/';
+Vue.prototype.erweima='http://111.198.157.165:8010/';
 
 // http://h5.yima.ymxc168.com/#/myindex
 /**
