@@ -70,6 +70,8 @@ export default {
               break;
             case "0000":
               Indicator.close();
+              //   绑定微信openId
+              that.bindWxOpenid();
               that.refreshToken(
                 that.phone,
                 data.data.refreshToken,
@@ -93,9 +95,12 @@ export default {
           let data = res.data;
           localStorage.setItem("openid", data.data.openId);
           localStorage.setItem("user", JSON.stringify(data.data));
-          console.log('id:' + this.$route.query.id)
-         //  this.$router.push({ path: "/saomahou/" + this.$route.query.id }); 
-         this.$router.push({name: 'saomahou', params: {id: this.$route.query.id}})
+          console.log("id:" + this.$route.query.id);
+          //  this.$router.push({ path: "/saomahou/" + this.$route.query.id });
+          this.$router.push({
+            name: "saomahou",
+            params: { id: this.$route.query.id }
+          });
         })
         .catch(err => {});
     },
@@ -182,26 +187,31 @@ export default {
         .then(res => {
           // that.openId = res.data.data
           localStorage.setItem("wxopenid", res.data.data);
-          that.bindWxOpenid(res.data.data);
           Indicator.close();
         })
         .catch(err => {
           Indicator.close();
         });
     },
-   //  绑定微信openid
-   bindWxOpenid: function (wxOpenId) {
-      this.$ajax({
-        method: "post",
-        url: "member/wx/set",
-        data: this.$qs.stringify({ openId: this.sessionId, opendId2: wxOpenId })
-      })
-        .then(res => {
-           console.log('绑定成功');
+    //  绑定微信openid
+    bindWxOpenid: function() {
+      let wxOpenId = localStorage.getItem("wxopenid");
+      let openId = this.sessionId;
+      if (wxOpenId && openId) {
+        this.$ajax({
+          method: "post",
+          url: "member/wx/set",
+          data: this.$qs.stringify({
+            openId: openId,
+            openId2: wxOpenId
+          })
         })
-        .catch(err => {
-        });
-   },
+          .then(res => {
+            console.log("绑定成功");
+          })
+          .catch(err => {});
+      };
+    },
     // 获取用于获取微信openId的code
     getpermit() {
       var ua = navigator.userAgent.toLowerCase();
@@ -214,7 +224,7 @@ export default {
           .replace(/[#]/g, "%23")
           .replace(/[&]/g, "%26")
           .replace(/[=]/g, "%3d");
-          pageUrl +=  '?id=' + this.$route.query.id;
+        pageUrl += "?id=" + this.$route.query.id;
         var url =
           "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" +
           this.appid +
@@ -229,32 +239,30 @@ export default {
           path: "/login"
         });
       }
-    },
+    }
   },
-  created() {
-  },
+  created() {},
   mounted() {
-   this.getsessionId();
-   let wxopenid = localStorage.getItem('wxopenid');
-   if(wxopenid && wxopenid !== 'undefined'){
+    this.getsessionId();
+    let wxopenid = localStorage.getItem("wxopenid");
+    if (wxopenid && wxopenid !== "undefined") {
       return;
-   };
-   var ua = navigator.userAgent.toLowerCase();
-   if (ua.match(/MicroMessenger/i) == "micromessenger") {
+    }
+    var ua = navigator.userAgent.toLowerCase();
+    if (ua.match(/MicroMessenger/i) == "micromessenger") {
       this.isWeixin = true;
-      var reg = new RegExp("(^|&)" + 'code' + "=([^&]*)(&|$)");
+      var reg = new RegExp("(^|&)" + "code" + "=([^&]*)(&|$)");
       var r = window.location.search.substr(1).match(reg);
       this.yanzhengcode = (r && r[2]) || null;
-      if(this.yanzhengcode) {
-         this.getopenid();
+      if (this.yanzhengcode) {
+        this.getopenid();
       } else {
-         this.getpermit();
-      };
-      
-   } else {
+        this.getpermit();
+      }
+    } else {
       // 微信外
       this.isWeixin = false;
-   }
+    }
   }
 };
 </script>
